@@ -1,0 +1,46 @@
+body {
+  background: #fff;
+  overflow-x: hidden;
+}
+.user-border {
+  border: 1px solid var(--text-and-svgs);
+  padding: 0.5rem;
+  border-radius: 200px;
+}
+
+.absolute-back-container {
+  position: absolute;
+  z-index: -1;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.absolute-back-container svg {
+  width: 100%;
+  height: 100%;
+}
+
+.main__wrapper.feedback {
+  padding: 0 40px !important;
+}
+
+.rating input[type='checkbox'] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+@media screen and (max-width: 767px) {
+  .rating_wrapper {
+    flex-wrap: wrap;
+  }
+  .rating_wrapper > * {
+    margin-bottom: 10px;
+  }
+  .main__wrapper.feedback {
+    padding: 0 15px !important;
+  }
+}

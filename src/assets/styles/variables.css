@@ -1,0 +1,19 @@
+:root {
+  --text-and-svgs: #4d546b;
+  --background-grey: #f7f8fa;
+  --small-heading: #7a7a7a;
+  --highlight: #f7f8fa;
+  --border: #c8c8c8;
+  --red: rgb(246, 63, 75);
+  --lighter-red: rgba(246, 63, 75, 0.66);
+  --light-red: rgba(246, 63, 75, 0.33);
+  --green: rgb(29, 191, 116);
+  --lighter-green: rgba(29, 191, 116, 0.66);
+  --light-green: rgba(29, 191, 116, 0.33);
+  --purple: rgb(163, 92, 255);
+  --lighter-purple: rgba(163, 92, 255, 0.66);
+  --light-purple: rgba(163, 92, 255, 0.33);
+  --yellow: rgb(247, 144, 9);
+  --lighter-yellow: rgba(247, 144, 9, 0.66);
+  --light-yellow: rgba(247, 144, 9, 0.33);
+}
