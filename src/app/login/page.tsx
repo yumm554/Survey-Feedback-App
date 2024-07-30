@@ -15,26 +15,36 @@ const Login = () => {
     email: '',
     password: '',
   });
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
+  const [success, setSuccess] = useState<string>();
 
-  const onLogin = async () => {
+  const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      setLoading(false);
+      setError('');
+      setSuccess('');
+      setLoading(true);
       const response = await axios.post('/api/users/login', user);
       console.log('Login success', response.data);
-      toast.success('Successfully Logged In');
+      toast.success('Redirecting...');
+      setSuccess('Redirecting...');
       if (response.data.role === 0) {
         router.push('/userfeedback');
       } else if (response.data.role === 1) {
-        router.push('/profile');
+        router.push('/feedbackList');
       }
     } catch (error: any) {
+      error?.response?.data?.error?.type === 2
+        ? setUser({ ...user, password: '' })
+        : setUser({ email: '', password: '' });
       console.log(
         'Login failed',
-        error?.response?.data?.message || error.message
+        error?.response?.data?.error?.message || error.message
       );
-      toast.error(error?.response?.data?.message || 'An error occurred');
+      toast.error(error?.response?.data?.error?.message || 'An error occurred');
+      setError(error?.response?.data?.error?.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -104,38 +114,51 @@ const Login = () => {
             <div className="rectangular-box highlight"></div>
           </div>
 
-          <label htmlFor="email">Email</label>
-          <input
-            className=""
-            id="email"
-            type="text"
-            value={user.email}
-            placeholder="Email"
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
-          />
+          <form onSubmit={onLogin} className="row-gap row-gap_20">
+            <label htmlFor="email">Email</label>
+            <input
+              className=""
+              id="email"
+              type="text"
+              value={user.email}
+              placeholder="Email"
+              required
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+            />
 
-          <label htmlFor="password">Password</label>
-          <input
-            className=""
-            id="password"
-            type="password"
-            value={user.password}
-            placeholder="Password"
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
-          />
-          {/* <span
+            <label htmlFor="password">Password</label>
+            <input
+              className=""
+              id="password"
+              type="password"
+              value={user.password}
+              required
+              placeholder="Password"
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+            />
+            {/* <span
             className="text-09x1"
             onClick={async () => router.push('/forgotpassword')}
           >
             Forget Password ?
           </span> */}
-          <button
-            className="align-center text-1x1"
-            onClick={onLogin}
-            disabled={buttonDisabled}
-          >
-            <span className="black-regular">Login</span> <SignIn />
-          </button>
+            {loading ? (
+              <button
+                className="align-center text-1x1"
+                disabled={buttonDisabled}
+              >
+                <span className="black-regular">Logging In</span>{' '}
+                <i className="loader"></i>
+              </button>
+            ) : (
+              <button className="align-center text-1x1">
+                <span className="black-regular">Login</span> <SignIn />
+              </button>
+            )}
+          </form>
+          {error && <p className="error text-09x1">{error}</p>}
+          {success && <p className="success text-09x1">{success}</p>}
+
           <p className="align-center text-09x1 centralize">
             <span>Don't have an account?</span>
             <Link

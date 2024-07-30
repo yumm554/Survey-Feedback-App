@@ -11,6 +11,7 @@ import {
   Reports,
   Settings,
 } from '@/assets/icons/getIcon';
+import axios from 'axios';
 import Link from 'next/link';
 import Image from 'next/image';
 import './feedbackList.css';
@@ -32,6 +33,11 @@ interface Pagination {
   totalFeedbacks: number;
 }
 
+interface Me {
+  username: string;
+  role: number;
+}
+
 const FeedbackList: React.FC = () => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
@@ -40,30 +46,49 @@ const FeedbackList: React.FC = () => {
     totalPages: 1,
     totalFeedbacks: 0,
   });
+  const [user, setUser] = useState<Me>({
+    username: '',
+    role: 1,
+  });
   const [loading, setLoading] = useState<boolean>(true);
-  const [mobNav, setMobNav] = useState<boolean>(true);
+  const [mobNav, setMobNav] = useState<boolean>(false);
+  const [desktopNav, setDesktopNav] = useState<boolean>(true);
+  const [disabled, setDisabled] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
 
+  //me call
   useEffect(() => {
-    setMobNav(!(window.innerWidth <= 1024));
-    const handleResize = () => {
-      setMobNav(!(window.innerWidth <= 1024));
+    const getUserDetails = async () => {
+      try {
+        const response = await axios.get(`/api/users/me`);
+        console.log(response);
+        setUser({
+          username: response.data?.user.username,
+          role: response.data?.user.role,
+        });
+      } catch (error: any) {
+        console.log('Get user details failed', error.message);
+      }
     };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    getUserDetails();
   }, []);
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
-      setLoading(true);
       try {
+        setError('');
+        setLoading(true);
+        setDisabled(true);
         const res = await fetch(
           `/api/users/feedbacks?page=${pagination.page}&limit=${pagination.limit}`
         );
         const data = await res.json();
         setFeedbacks(data.feedbacks);
         setPagination(data.pagination);
+        setDisabled(false);
       } catch (error) {
         console.error('Error fetching feedbacks:', error);
+        setError('An error occurred');
       } finally {
         setLoading(false);
       }
@@ -81,7 +106,7 @@ const FeedbackList: React.FC = () => {
             onClick={() => setMobNav(!mobNav)}
           ></div>
 
-          <aside className="relative side-width padding-around-global feedback-sidebar">
+          <aside className="relative side-width padding-around-global feedback-sidebar desktop-hide">
             <header>
               <Image
                 className="PS-logo"
@@ -127,6 +152,50 @@ const FeedbackList: React.FC = () => {
           </aside>
         </>
       )}
+      {desktopNav && (
+        <>
+          <div
+            className="mob-nav-overlay mob-hide tab-hide"
+            onClick={() => setMobNav(!mobNav)}
+          ></div>
+
+          <aside className="relative side-width padding-around-global feedback-sidebar mob-hide tab-hide">
+            <header>
+              <Image
+                className="PS-logo"
+                src={require('../../assets/images/PS-logo.png')}
+                alt="PS logo"
+              />
+            </header>
+            <main>
+              <nav>
+                <ul className="bullet_list_items row-gap_30">
+                  <li className="align-center">
+                    <Dashboard />
+                    <p>Dasboard</p>
+                  </li>
+                  <li className="align-center">
+                    <FeedbackSubmission />
+                    <p>Feedback Submissions</p>
+                  </li>
+                  <li className="align-center">
+                    <Reports />
+                    <p>Reports</p>
+                  </li>
+                  <li className="align-center">
+                    <Settings />
+                    <p>Settings</p>
+                  </li>
+                  <li className="align-center">
+                    <Logout />
+                    <p>Logout</p>
+                  </li>
+                </ul>
+              </nav>
+            </main>
+          </aside>
+        </>
+      )}
       <div className="flex__1 max-height scrollable">
         <header className="header__white space-between padding-around-global">
           <div
@@ -148,8 +217,10 @@ const FeedbackList: React.FC = () => {
                 <User />
               </div>
               <div>
-                <p>Username</p>
-                <span className="grey-medium text-09x1">Admin</span>
+                <p>{user.username || 'Username'}</p>
+                <span className="grey-medium text-09x1">
+                  {user.role === 0 ? 'User' : 'Admin'}
+                </span>
               </div>
             </div>
           </div>
@@ -178,25 +249,29 @@ const FeedbackList: React.FC = () => {
             <h1 className="text-1x1 black-regular">Feedback Submissions</h1>
           </div>
 
-          <table className="margin-around-global">
+          <table className="margin-around-global col__flex mob__col">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Rating</th>
+                <th className="collapsed-cell">Name</th>
+                <th className="collapsed-cell">Email</th>
+                <th className="rating-cell">Rating</th>
               </tr>
             </thead>
             <tbody>
-              {loading ? (
+              {error ? (
+                <tr className="no-background">
+                  <td className="error text-09x1">{error}</td>
+                </tr>
+              ) : loading ? (
                 <tr className="no-background">
                   <td>Loading...</td>
                 </tr>
               ) : (
                 feedbacks.map((feedback) => (
                   <tr key={feedback._id}>
-                    <td>{feedback.username}</td>
-                    <td>{feedback.email}</td>
-                    <td>
+                    <td className="collapsed-cell">{feedback.username}</td>
+                    <td className="collapsed-cell">{feedback.email}</td>
+                    <td className="rating-cell">
                       <div className="rating-box-light light-green">
                         <RatingStar />
                         <b className="rating-col">{feedback.rating}</b>
@@ -222,7 +297,7 @@ const FeedbackList: React.FC = () => {
                   }))
                 }
                 className={
-                  (pagination.page === 1 ? 'disabled' : '') +
+                  (pagination.page === 1 || disabled ? 'disabled' : '') +
                   ' previous-pagination'
                 }
               >
@@ -237,7 +312,9 @@ const FeedbackList: React.FC = () => {
                   }))
                 }
                 className={
-                  pagination.page === pagination.totalPages ? 'disabled' : ''
+                  pagination.page === pagination.totalPages || disabled
+                    ? 'disabled'
+                    : ''
                 }
               >
                 <PaginationArrow />

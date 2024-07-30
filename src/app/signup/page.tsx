@@ -11,7 +11,6 @@ import { FeedbackSubmission, SignIn } from '../../assets/icons/getIcon';
 
 const SignUp = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     username: '',
     email: '',
@@ -19,7 +18,10 @@ const SignUp = () => {
     password: '',
     password_confirmation: '',
   });
+  const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [error, setError] = useState<string>();
+  const [success, setSuccess] = useState<string>();
 
   useEffect(() => {
     if (
@@ -35,16 +37,43 @@ const SignUp = () => {
     }
   }, [user]);
 
-  const onSignUp = async () => {
+  const onSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
+      setError('');
+      setSuccess('');
       setLoading(true);
+      if (user.password !== user.password_confirmation) {
+        setError('Password does not match');
+        setUser({ ...user, password: '', password_confirmation: '' });
+        return;
+      }
       const response = await axios.post(`/api/users/signup`, user);
       console.log('Signup success', response.data);
       toast.success('Successfully Signed Up');
+      setSuccess('Successfully Signed Up');
       router.push('/login');
     } catch (error: any) {
-      console.log('Signup failed', error.message);
-      toast.error(error.message);
+      error?.response?.data?.error?.type === 2
+        ? setUser({
+            ...user,
+            username: '',
+            password: '',
+            password_confirmation: '',
+          })
+        : setUser({
+            username: '',
+            email: '',
+            role: 0,
+            password: '',
+            password_confirmation: '',
+          });
+      console.log(
+        'Signup failed',
+        error?.response?.data?.error?.message || error.message
+      );
+      toast.error(error?.response?.data?.error?.message || 'An error occurred');
+      setError(error?.response?.data?.error?.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -106,26 +135,29 @@ const SignUp = () => {
             <div className="rectangular-box light-purple"></div>
             <div className="rectangular-box highlight"></div>
           </div>
-          <label htmlFor="username">Username</label>
-          <input
-            className=""
-            id="username"
-            type="text"
-            value={user.username}
-            placeholder="Username"
-            onChange={(e) => setUser({ ...user, username: e.target.value })}
-          />
+          <form onSubmit={onSignUp} className="row-gap row-gap_20">
+            <label htmlFor="username">Username</label>
+            <input
+              className=""
+              id="username"
+              type="text"
+              value={user.username}
+              placeholder="Username"
+              required
+              onChange={(e) => setUser({ ...user, username: e.target.value })}
+            />
 
-          <label htmlFor="email">Email</label>
-          <input
-            className=""
-            id="email"
-            type="text"
-            value={user.email}
-            placeholder="Email"
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
-          />
-          {/* <label htmlFor="role">Role</label>
+            <label htmlFor="email">Email</label>
+            <input
+              className=""
+              id="email"
+              type="text"
+              value={user.email}
+              placeholder="Email"
+              required
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+            />
+            {/* <label htmlFor="role">Role</label>
       <input
         className=""
         id="role"
@@ -135,54 +167,64 @@ const SignUp = () => {
         onChange={(e) => setUser({ ...user, role: e.target.value })}
       /> */}
 
-          <label>Role:</label>
-          <div className="align-center">
+            <label>Role:</label>
+            <div className="align-center">
+              <input
+                type="checkbox"
+                value={0}
+                checked={user.role === 0}
+                onChange={() => setUser({ ...user, role: 0 })}
+              />
+              <label className="no-hide">User</label>
+
+              <input
+                type="checkbox"
+                value={1}
+                checked={user.role === 1}
+                onChange={() => setUser({ ...user, role: 1 })}
+              />
+              <label className="no-hide">Admin</label>
+            </div>
+
+            <label htmlFor="password">Password</label>
             <input
-              type="checkbox"
-              value={0}
-              checked={user.role === 0}
-              onChange={() => setUser({ ...user, role: 0 })}
+              className=""
+              id="password"
+              type="password"
+              value={user.password}
+              required
+              placeholder="Password"
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
             />
-            <label className="no-hide">User</label>
 
+            <label htmlFor="password">Confirm Password</label>
             <input
-              type="checkbox"
-              value={1}
-              checked={user.role === 1}
-              onChange={() => setUser({ ...user, role: 1 })}
+              className=""
+              id="password_confirmation"
+              type="password"
+              value={user.password_confirmation}
+              placeholder="Confirm Password"
+              required
+              onChange={(e) =>
+                setUser({ ...user, password_confirmation: e.target.value })
+              }
             />
-            <label className="no-hide">Admin</label>
-          </div>
-
-          <label htmlFor="password">Password</label>
-          <input
-            className=""
-            id="password"
-            type="password"
-            value={user.password}
-            placeholder="Password"
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
-          />
-
-          <label htmlFor="password">Confirm Password</label>
-          <input
-            className=""
-            id="password_confirmation"
-            type="password"
-            value={user.password_confirmation}
-            placeholder="Confirm Password"
-            onChange={(e) =>
-              setUser({ ...user, password_confirmation: e.target.value })
-            }
-          />
-
-          <button
-            className="align-center text-1x1"
-            onClick={onSignUp}
-            disabled={buttonDisabled}
-          >
-            <span className="black-regular">Signup</span> <SignIn />
-          </button>
+            {loading ? (
+              <button
+                className="align-center text-1x1"
+                disabled={buttonDisabled}
+              >
+                <span className="black-regular">Signing up</span>{' '}
+                <i className="loader"></i>
+              </button>
+            ) : (
+              <button className="align-center text-1x1">
+                <span className="black-regular">Sign Up</span> <SignIn />
+              </button>
+            )}
+          </form>
+          {error && <p className="error text-09x1">{error}</p>}
+          {success && <p className="success text-09x1">{success}</p>}
 
           <p className="align-center text-09x1 centralize">
             <span>Already have an account?</span>

@@ -17,9 +17,13 @@ import {
 
 const UserFeedback = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>();
+  const [success, setSuccess] = useState<string>();
+
   const [feedback, setFeedback] = useState({
     username: '',
     email: '',
+    role: 1,
     rating: 3,
     comments: '',
   });
@@ -31,17 +35,16 @@ const UserFeedback = () => {
   useEffect(() => {
     const getUserDetails = async () => {
       try {
-        setLoading(true);
         const response = await axios.get(`/api/users/me`);
+        console.log(response);
         setFeedback({
           ...feedback,
           username: response.data?.user.username,
           email: response.data?.user.email,
+          role: response.data?.user.role,
         });
       } catch (error: any) {
         console.log('Get user details failed', error.message);
-      } finally {
-        setLoading(false);
       }
     };
     getUserDetails();
@@ -60,15 +63,21 @@ const UserFeedback = () => {
     }
   }, [feedback]);
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
+      setSuccess('');
+      setError('');
       setLoading(true);
       const response = await axios.post(`/api/users/userfeedback`, feedback);
       console.log('Submission success', response.data);
       toast.success('Successfully Submitted');
+      setSuccess(response.data?.message);
+      setFeedback({ ...feedback, comments: '', rating: 3 });
     } catch (error: any) {
       console.log('Submission failed', error.message);
-      toast.error(error.message);
+      toast.error('An error occurred');
+      setError('An error occurred');
     } finally {
       setLoading(false);
     }
@@ -89,8 +98,10 @@ const UserFeedback = () => {
                 <User />
               </div>
               <div>
-                <p>Username</p>
-                <span className="grey-medium text-09x1">Admin</span>
+                <p>{feedback.username || 'Username'}</p>
+                <span className="grey-medium text-09x1">
+                  {feedback.role === 0 ? 'User' : 'Admin'}
+                </span>
               </div>
             </div>
           </div>
@@ -117,130 +128,142 @@ const UserFeedback = () => {
                 We Value Your Opinion - Fill Out Our Feedback Form
               </h1>
             </div>
+            <form onSubmit={onSubmit} className="row-gap row-gap_20">
+              <label htmlFor="username">Username</label>
+              <input
+                className=""
+                id="username"
+                type="text"
+                disabled
+                value={feedback.username}
+                placeholder="Username"
+                required
+                onChange={(e) =>
+                  setFeedback({ ...feedback, username: e.target.value })
+                }
+              />
 
-            <label htmlFor="username">Username</label>
-            <input
-              className=""
-              id="username"
-              type="text"
-              disabled
-              value={feedback.username}
-              placeholder="Username"
-              onChange={(e) =>
-                setFeedback({ ...feedback, username: e.target.value })
-              }
-            />
+              <label htmlFor="email">Email</label>
+              <input
+                className=""
+                id="email"
+                type="text"
+                disabled
+                value={feedback.email}
+                placeholder="Email"
+                required
+                onChange={(e) =>
+                  setFeedback({ ...feedback, email: e.target.value })
+                }
+              />
 
-            <label htmlFor="email">Email</label>
-            <input
-              className=""
-              id="email"
-              type="text"
-              disabled
-              value={feedback.email}
-              placeholder="Email"
-              onChange={(e) =>
-                setFeedback({ ...feedback, email: e.target.value })
-              }
-            />
+              <label>Rating:</label>
+              <div className="align-center rating_wrapper">
+                <div className="rating relative">
+                  <input
+                    type="checkbox"
+                    value={5}
+                    checked={feedback.rating === 5}
+                  />
+                  <div
+                    className="rating-box align-center green"
+                    onClick={() => handleRatingClick(5)}
+                  >
+                    <RatingStar />
+                    <span className="black-regular text-12x1">5</span>
+                  </div>
+                </div>
 
-            <label>Rating:</label>
-            <div className="align-center rating_wrapper">
-              <div className="rating relative">
-                <input
-                  type="checkbox"
-                  value={5}
-                  checked={feedback.rating === 5}
-                />
-                <div
-                  className="rating-box align-center green"
-                  onClick={() => handleRatingClick(5)}
-                >
-                  <RatingStar />
-                  <span className="black-regular text-12x1">5</span>
+                <div className="rating relative">
+                  <input
+                    type="checkbox"
+                    value={4}
+                    checked={feedback.rating === 4}
+                  />
+                  <div
+                    className="rating-box align-center rate-lighter-green"
+                    onClick={() => handleRatingClick(4)}
+                  >
+                    <RatingStar />
+                    <span className="black-regular text-12x1">4</span>
+                  </div>
+                </div>
+
+                <div className="rating relative">
+                  <input
+                    type="checkbox"
+                    value={3}
+                    checked={feedback.rating === 3}
+                  />
+                  <div
+                    className="rating-box align-center rate-light-green"
+                    onClick={() => handleRatingClick(3)}
+                  >
+                    <RatingStar />
+                    <span className="black-regular text-12x1">3</span>
+                  </div>
+                </div>
+
+                <div className="rating relative">
+                  <input
+                    type="checkbox"
+                    value={2}
+                    checked={feedback.rating === 2}
+                  />
+                  <div
+                    className="rating-box align-center rate-lightest-green"
+                    onClick={() => handleRatingClick(2)}
+                  >
+                    <RatingStar />
+                    <span className="black-regular text-12x1">2</span>
+                  </div>
+                </div>
+
+                <div className="rating relative">
+                  <input
+                    type="checkbox"
+                    value={1}
+                    checked={feedback.rating === 1}
+                  />
+                  <div
+                    className="rating-box align-center highlight"
+                    onClick={() => handleRatingClick(1)}
+                  >
+                    <RatingStar />
+                    <span className="black-regular text-12x1">1</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="rating relative">
-                <input
-                  type="checkbox"
-                  value={4}
-                  checked={feedback.rating === 4}
-                />
-                <div
-                  className="rating-box align-center rate-lighter-green"
-                  onClick={() => handleRatingClick(4)}
+              <label htmlFor="password">Comments</label>
+              <textarea
+                className=""
+                id="comments"
+                rows={6}
+                value={feedback.comments}
+                placeholder="Comments"
+                required
+                onChange={(e) =>
+                  setFeedback({ ...feedback, comments: e.target.value })
+                }
+              />
+              {loading ? (
+                <button
+                  className="align-center text-1x1"
+                  disabled={buttonDisabled}
                 >
-                  <RatingStar />
-                  <span className="black-regular text-12x1">4</span>
-                </div>
-              </div>
-
-              <div className="rating relative">
-                <input
-                  type="checkbox"
-                  value={3}
-                  checked={feedback.rating === 3}
-                />
-                <div
-                  className="rating-box align-center rate-light-green"
-                  onClick={() => handleRatingClick(3)}
-                >
-                  <RatingStar />
-                  <span className="black-regular text-12x1">3</span>
-                </div>
-              </div>
-
-              <div className="rating relative">
-                <input
-                  type="checkbox"
-                  value={2}
-                  checked={feedback.rating === 2}
-                />
-                <div
-                  className="rating-box align-center rate-lightest-green"
-                  onClick={() => handleRatingClick(2)}
-                >
-                  <RatingStar />
-                  <span className="black-regular text-12x1">2</span>
-                </div>
-              </div>
-
-              <div className="rating relative">
-                <input
-                  type="checkbox"
-                  value={1}
-                  checked={feedback.rating === 1}
-                />
-                <div
-                  className="rating-box align-center highlight"
-                  onClick={() => handleRatingClick(1)}
-                >
-                  <RatingStar />
-                  <span className="black-regular text-12x1">1</span>
-                </div>
-              </div>
-            </div>
-
-            <label htmlFor="password">Comments</label>
-            <textarea
-              className=""
-              id="comments"
-              rows={6}
-              value={feedback.comments}
-              placeholder="Comments"
-              onChange={(e) =>
-                setFeedback({ ...feedback, comments: e.target.value })
-              }
-            />
-            <button
-              className="align-center text-1x1"
-              onClick={onSubmit}
-              disabled={buttonDisabled}
-            >
-              <span className="black-regular">Submit Feedback</span>{' '}
-              <SubmitFeedback />
-            </button>
+                  <span className="black-regular">Submitting Feedback</span>{' '}
+                  <i className="loader"></i>
+                </button>
+              ) : (
+                <button className="align-center text-1x1">
+                  <span className="black-regular">Submit Feedback</span>{' '}
+                  <SubmitFeedback />
+                </button>
+              )}
+            </form>
+            {error && <p className="error text-09x1">{error}</p>}
+            {success && <p className="success text-09x1">{success}</p>}
           </div>
         </div>
         <div className="side-width full-width">

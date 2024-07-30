@@ -175,4 +175,22 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
     padding-left: 15px;
     padding-right: 15px;
   }
+
+  tr {
+    display: flex;
+    width: 100%;
+  }
+  .collapsed-cell {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .rating-cell {
+    flex: 1;
+    width: 100px;
+    display: flex;
+    align-items: center;
+  }
 }
