@@ -1,17 +1,14 @@
-// pages/api/feedbacks.js
-
 import { NextRequest, NextResponse } from 'next/server'
 import Feedback from '@/models/feedbackModel'
 import { dbConnect } from '@/dbConfig/dbConfig'
 
 dbConnect()
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const url = new URL(request.url)
-    const page = parseInt(url.searchParams.get('page')) || 1 // Default to page 1
-    const limit = parseInt(url.searchParams.get('limit')) || 10 // Default to 10 items per page
-
+    const page = parseInt(url.searchParams.get('page') || '1', 10) // Default to page 1
+    const limit = parseInt(url.searchParams.get('limit') || '10', 10) // Default to 10 items per page
     const skip = (page - 1) * limit
 
     // Fetch feedbacks with pagination
