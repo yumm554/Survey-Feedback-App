@@ -13,14 +13,25 @@ import {
   User,
   FeedbackFormBack,
   RatingStar,
+  Settings,
 } from '@/assets/icons/getIcon';
+import { useRouter } from 'next/navigation';
+
+interface Feedback {
+  username: string;
+  email: string;
+  role: number;
+  rating: number;
+  comments: string;
+}
 
 const UserFeedback = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
+  const [nav, setNav] = useState<boolean>(false);
 
-  const [feedback, setFeedback] = useState({
+  const [feedback, setFeedback] = useState<Feedback>({
     username: '',
     email: '',
     role: 1,
@@ -83,6 +94,18 @@ const UserFeedback = () => {
     }
   };
 
+  const router = useRouter();
+  const logout = async () => {
+    try {
+      await axios.get(`/api/users/logout`);
+      toast.success('Successfully Logged Out');
+      router.push('/login');
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div>
       <header className="space-between padding-around-global">
@@ -92,8 +115,8 @@ const UserFeedback = () => {
           alt="PS logo"
         />
         {feedback.username ? (
-          <div>
-            <div className="align-center">
+          <div className="relative pointer">
+            <div className="align-center" onClick={() => setNav(!nav)}>
               <div className="user-border">
                 <User />
               </div>
@@ -104,6 +127,21 @@ const UserFeedback = () => {
                 </span>
               </div>
             </div>
+            {nav && (
+              <div className="popup padding-around-global row-gap row-gap_20">
+                <Link
+                  className="align-center pointer no-underline"
+                  href="/settings"
+                >
+                  <Settings />
+                  <span className="black-regular">Settings</span>
+                </Link>
+                <div className="hr"></div>
+                <div className="align-center pointer" onClick={logout}>
+                  <span className="black-regular">Logout</span> <NavArrow />
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <Link href="/login" className="no-underline align-center">
@@ -135,12 +173,9 @@ const UserFeedback = () => {
                 id="username"
                 type="text"
                 disabled
-                value={feedback.username}
+                value={'' + feedback.username}
                 placeholder="Username"
                 required
-                onChange={(e) =>
-                  setFeedback({ ...feedback, username: e.target.value })
-                }
               />
 
               <label htmlFor="email">Email</label>
@@ -149,93 +184,65 @@ const UserFeedback = () => {
                 id="email"
                 type="text"
                 disabled
-                value={feedback.email}
+                value={'' + feedback.email}
                 placeholder="Email"
                 required
-                onChange={(e) =>
-                  setFeedback({ ...feedback, email: e.target.value })
-                }
               />
 
               <label>Rating:</label>
               <div className="align-center rating_wrapper">
-                <div className="rating relative">
-                  <input
-                    type="checkbox"
-                    value={5}
-                    checked={feedback.rating === 5}
-                  />
-                  <div
-                    className="rating-box align-center green"
-                    onClick={() => handleRatingClick(5)}
-                  >
-                    <RatingStar />
-                    <span className="black-regular text-12x1">5</span>
-                  </div>
+                <div
+                  className={`rating-box align-center lighter-green ${
+                    feedback.rating === 5 ? 'active' : ''
+                  }`}
+                  onClick={() => handleRatingClick(5)}
+                >
+                  <RatingStar />
+                  <span className="black-regular text-12x1">5</span>
                 </div>
 
-                <div className="rating relative">
-                  <input
-                    type="checkbox"
-                    value={4}
-                    checked={feedback.rating === 4}
-                  />
-                  <div
-                    className="rating-box align-center rate-lighter-green"
-                    onClick={() => handleRatingClick(4)}
-                  >
-                    <RatingStar />
-                    <span className="black-regular text-12x1">4</span>
-                  </div>
+                <div
+                  className={`rating-box align-center rate-lighter-green ${
+                    feedback.rating === 4 ? 'active' : ''
+                  }`}
+                  onClick={() => handleRatingClick(4)}
+                >
+                  <RatingStar />
+                  <span className="black-regular text-12x1">4</span>
                 </div>
 
-                <div className="rating relative">
-                  <input
-                    type="checkbox"
-                    value={3}
-                    checked={feedback.rating === 3}
-                  />
-                  <div
-                    className="rating-box align-center rate-light-green"
-                    onClick={() => handleRatingClick(3)}
-                  >
-                    <RatingStar />
-                    <span className="black-regular text-12x1">3</span>
-                  </div>
+                <div
+                  className={`rating-box align-center rate-light-green ${
+                    feedback.rating === 3 ? 'active' : ''
+                  }`}
+                  onClick={() => handleRatingClick(3)}
+                >
+                  <RatingStar />
+                  <span className="black-regular text-12x1">3</span>
                 </div>
 
-                <div className="rating relative">
-                  <input
-                    type="checkbox"
-                    value={2}
-                    checked={feedback.rating === 2}
-                  />
-                  <div
-                    className="rating-box align-center rate-lightest-green"
-                    onClick={() => handleRatingClick(2)}
-                  >
-                    <RatingStar />
-                    <span className="black-regular text-12x1">2</span>
-                  </div>
+                <div
+                  className={`rating-box align-center rate-lightest-green ${
+                    feedback.rating === 2 ? 'active' : ''
+                  }`}
+                  onClick={() => handleRatingClick(2)}
+                >
+                  <RatingStar />
+                  <span className="black-regular text-12x1">2</span>
                 </div>
 
-                <div className="rating relative">
-                  <input
-                    type="checkbox"
-                    value={1}
-                    checked={feedback.rating === 1}
-                  />
-                  <div
-                    className="rating-box align-center highlight"
-                    onClick={() => handleRatingClick(1)}
-                  >
-                    <RatingStar />
-                    <span className="black-regular text-12x1">1</span>
-                  </div>
+                <div
+                  className={`rating-box align-center highlight ${
+                    feedback.rating === 1 ? 'active' : ''
+                  }`}
+                  onClick={() => handleRatingClick(1)}
+                >
+                  <RatingStar />
+                  <span className="black-regular text-12x1">1</span>
                 </div>
               </div>
 
-              <label htmlFor="password">Comments</label>
+              <label htmlFor="comments">Comments</label>
               <textarea
                 className=""
                 id="comments"

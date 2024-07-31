@@ -54,20 +54,6 @@ const SignUp = () => {
       setSuccess('Successfully Signed Up');
       router.push('/login');
     } catch (error: any) {
-      error?.response?.data?.error?.type === 2
-        ? setUser({
-            ...user,
-            username: '',
-            password: '',
-            password_confirmation: '',
-          })
-        : setUser({
-            username: '',
-            email: '',
-            role: 0,
-            password: '',
-            password_confirmation: '',
-          });
       console.log(
         'Signup failed',
         error?.response?.data?.error?.message || error.message

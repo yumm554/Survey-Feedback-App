@@ -1,0 +1,63 @@
+body {
+  background: var(--background-grey);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.delete-account {
+  color: var(--red);
+}
+
+.form__white.dashboard-col {
+  border-radius: 6px !important;
+  width: auto;
+}
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  body {
+    height: auto;
+    overflow: auto;
+  }
+  .feedback-sidebar,
+  .mob-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+  }
+  .mob-nav-overlay {
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  .settings-form input {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  body {
+    height: auto;
+    overflow: auto;
+  }
+  .feedback-sidebar,
+  .mob-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+  }
+  .mob-nav-overlay {
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  .mob-no-right {
+    text-align: left;
+  }
+  .mob__col-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .mob__col-left > *:not(:last-child) {
+    margin-bottom: 20px;
+    margin-right: 0;
+  }
+}

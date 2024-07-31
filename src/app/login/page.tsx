@@ -33,12 +33,9 @@ const Login = () => {
       if (response.data.role === 0) {
         router.push('/userfeedback');
       } else if (response.data.role === 1) {
-        router.push('/feedbackList');
+        router.push('/feedbacklist');
       }
     } catch (error: any) {
-      error?.response?.data?.error?.type === 2
-        ? setUser({ ...user, password: '' })
-        : setUser({ email: '', password: '' });
       console.log(
         'Login failed',
         error?.response?.data?.error?.message || error.message

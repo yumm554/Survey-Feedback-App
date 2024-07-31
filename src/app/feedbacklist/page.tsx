@@ -15,6 +15,8 @@ import axios from 'axios';
 import Link from 'next/link';
 import Image from 'next/image';
 import './feedbackList.css';
+import logout from '../../handlers/logout';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { NavArrow, User } from '@/assets/icons/getIcon';
 
@@ -39,6 +41,7 @@ interface Me {
 }
 
 const FeedbackList: React.FC = () => {
+  const router = useRouter();
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
@@ -83,6 +86,7 @@ const FeedbackList: React.FC = () => {
           `/api/users/feedbacks?page=${pagination.page}&limit=${pagination.limit}`
         );
         const data = await res.json();
+
         setFeedbacks(data.feedbacks);
         setPagination(data.pagination);
         setDisabled(false);
@@ -116,28 +120,36 @@ const FeedbackList: React.FC = () => {
             </header>
             <main>
               <nav>
-                <ul className="bullet_list_items row-gap_30">
-                  <li className="align-center">
+                <ul className="bullet_list_items row-gap_10">
+                  <li className="align-center pointer">
                     <Dashboard />
                     <p>Dasboard</p>
                   </li>
-                  <li className="align-center">
+                  <li className="align-center highlight-background">
                     <FeedbackSubmission />
                     <p>Feedback Submissions</p>
                   </li>
-                  <li className="align-center">
+                  <li className="align-center pointer">
                     <Reports />
                     <p>Reports</p>
                   </li>
-                  <li className="align-center">
-                    <Settings />
-                    <p>Settings</p>
+                  <li className="align-center pointer">
+                    <Link
+                      href="/settings"
+                      className="no-underline align-center"
+                    >
+                      <Settings />
+                      <p>Settings</p>
+                    </Link>
                   </li>
-                  <li className="align-center">
+                  <li
+                    className="align-center pointer"
+                    onClick={() => logout(router)}
+                  >
                     <Logout />
                     <p>Logout</p>
                   </li>
-                  <li className="desktop-hide">
+                  <li className="desktop-hide pointer">
                     <Link
                       href="/userfeedback"
                       className="no-underline align-center"
@@ -169,33 +181,51 @@ const FeedbackList: React.FC = () => {
             </header>
             <main>
               <nav>
-                <ul className="bullet_list_items row-gap_30">
-                  <li className="align-center">
-                    <Dashboard />
-                    <p>Dasboard</p>
-                  </li>
-                  <li className="align-center">
-                    <FeedbackSubmission />
-                    <p>Feedback Submissions</p>
-                  </li>
-                  <li className="align-center">
-                    <Reports />
-                    <p>Reports</p>
-                  </li>
-                  <li className="align-center">
-                    <Settings />
-                    <p>Settings</p>
-                  </li>
-                  <li className="align-center">
-                    <Logout />
-                    <p>Logout</p>
-                  </li>
-                </ul>
+                {loading ? (
+                  <ul className="bullet_list_items loader-gap_40">
+                    <div className="text-loader"></div>
+                    <div className="text-loader"></div>
+                    <div className="text-loader"></div>
+                    <div className="text-loader"></div>
+                  </ul>
+                ) : (
+                  <ul className="bullet_list_items row-gap_10">
+                    <li className="align-center pointer">
+                      <Dashboard />
+                      <p>Dasboard</p>
+                    </li>
+                    <li className="align-center highlight-background">
+                      <FeedbackSubmission />
+                      <p>Feedback Submissions</p>
+                    </li>
+                    <li className="align-center pointer">
+                      <Reports />
+                      <p>Reports</p>
+                    </li>
+                    <li className="align-center pointer">
+                      <Link
+                        href="/settings"
+                        className="no-underline align-center"
+                      >
+                        <Settings />
+                        <p>Settings</p>
+                      </Link>
+                    </li>
+                    <li
+                      className="align-center pointer"
+                      onClick={() => logout(router)}
+                    >
+                      <Logout />
+                      <p>Logout</p>
+                    </li>
+                  </ul>
+                )}
               </nav>
             </main>
           </aside>
         </>
       )}
+
       <div className="flex__1 max-height scrollable">
         <header className="header__white space-between padding-around-global">
           <div
@@ -216,11 +246,19 @@ const FeedbackList: React.FC = () => {
               <div className="user-border">
                 <User />
               </div>
-              <div>
-                <p>{user.username || 'Username'}</p>
-                <span className="grey-medium text-09x1">
-                  {user.role === 0 ? 'User' : 'Admin'}
-                </span>
+              <div className="loader-used">
+                {loading ? (
+                  <div className="text-loader"></div>
+                ) : (
+                  <p>{user.username || 'Username'}</p>
+                )}
+                {loading ? (
+                  <div className="text-loader"></div>
+                ) : (
+                  <span className="grey-medium text-09x1">
+                    {user.role === 0 ? 'User' : 'Admin'}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -231,9 +269,22 @@ const FeedbackList: React.FC = () => {
             <h1 className="text-1x1 black-regular">Overview</h1>
           </div>
           <div className="align-bottom">
-            <div className="row-gap row-gap row-gap_10">
-              <h3 className="text-23x1 black-medium">S-2100</h3>
-              <p>Over 2,100 responses have been collected from users.</p>
+            <div className="row-gap row-gap row-gap_10 loader-used">
+              {loading ? (
+                <div className="text-loader"></div>
+              ) : (
+                <h3 className="text-23x1 black-medium">
+                  S-{pagination.totalFeedbacks}
+                </h3>
+              )}
+              {loading ? (
+                <div className="text-loader"></div>
+              ) : (
+                <p>
+                  Over {pagination.totalFeedbacks} responses have been collected
+                  from users.
+                </p>
+              )}
             </div>
             <div className="boxes align-center">
               <div className="rectangular-box green"></div>
@@ -249,12 +300,12 @@ const FeedbackList: React.FC = () => {
             <h1 className="text-1x1 black-regular">Feedback Submissions</h1>
           </div>
 
-          <table className="margin-around-global col__flex mob__col">
+          <table className="margin-around-global mob__col border-around">
             <thead>
               <tr>
                 <th className="collapsed-cell">Name</th>
                 <th className="collapsed-cell">Email</th>
-                <th className="rating-cell">Rating</th>
+                <th className="rating-cell align-right">Rating</th>
               </tr>
             </thead>
             <tbody>
@@ -271,7 +322,7 @@ const FeedbackList: React.FC = () => {
                   <tr key={feedback._id}>
                     <td className="collapsed-cell">{feedback.username}</td>
                     <td className="collapsed-cell">{feedback.email}</td>
-                    <td className="rating-cell">
+                    <td className="rating-cell align-right">
                       <div className="rating-box-light light-green">
                         <RatingStar />
                         <b className="rating-col">{feedback.rating}</b>

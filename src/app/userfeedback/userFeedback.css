@@ -1,6 +1,6 @@
 body {
   background: #fff;
-  overflow-x: hidden;
+  overflow-y: auto !important;
 }
 .user-border {
   border: 1px solid var(--text-and-svgs);

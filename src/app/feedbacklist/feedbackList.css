@@ -4,36 +4,18 @@ body {
   overflow: hidden;
 }
 
-.header__white {
-  background: #fff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-}
-
 .form__white.dashboard-col {
   border-radius: 6px !important;
   width: auto;
 }
 
-.user-border {
-  border: 1px solid var(--text-and-svgs);
-  padding: 0.5rem;
-  border-radius: 200px;
-}
-
 table {
   width: -webkit-fill-available;
   margin: 35px 0;
-  border: 1px solid var(--border);
-  border-radius: 24px;
   overflow: hidden;
   border-spacing: 0;
   margin-top: 0 !important;
   margin-bottom: 0 !important;
-}
-
-tr > th:nth-child(3),
-tr > td:nth-child(3) {
-  text-align: right;
 }
 
 th,
@@ -168,8 +150,10 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
     margin-bottom: 35px;
     margin-left: 0 !important;
     margin-right: 0 !important;
-    border: 0px solid;
     padding: 0;
+  }
+  table.border-around {
+    border: 0px solid;
   }
   tr > *:not(:nth-child(2)) {
     padding-left: 15px;
