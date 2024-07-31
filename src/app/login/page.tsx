@@ -71,7 +71,7 @@ const Login = () => {
             alt="PS logo"
           />
         </header>
-        <main className="row-gap row-gap_20 main__wrapper padding-fixer-top padding-fixer-bottom">
+        <main className="row-gap row-gap_20 main__wrapper ">
           <ul className="bullet_list_items row-gap row-gap_20">
             <li className="align-center">
               <div className="bullet yellow"></div>

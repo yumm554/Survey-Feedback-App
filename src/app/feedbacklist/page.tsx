@@ -182,11 +182,19 @@ const FeedbackList: React.FC = () => {
             <main>
               <nav>
                 {loading ? (
-                  <ul className="bullet_list_items loader-gap_40">
-                    <div className="text-loader"></div>
-                    <div className="text-loader"></div>
-                    <div className="text-loader"></div>
-                    <div className="text-loader"></div>
+                  <ul className="bullet_list_items row-gap_10">
+                    <li>
+                      <p className="text-loader"></p>
+                    </li>
+                    <li>
+                      <p className="text-loader"></p>
+                    </li>
+                    <li>
+                      <p className="text-loader"></p>
+                    </li>
+                    <li>
+                      <p className="text-loader"></p>
+                    </li>
                   </ul>
                 ) : (
                   <ul className="bullet_list_items row-gap_10">

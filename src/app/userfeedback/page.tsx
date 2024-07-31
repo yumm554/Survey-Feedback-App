@@ -26,7 +26,7 @@ interface Feedback {
 }
 
 const UserFeedback = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
   const [nav, setNav] = useState<boolean>(false);
@@ -46,6 +46,7 @@ const UserFeedback = () => {
   useEffect(() => {
     const getUserDetails = async () => {
       try {
+        setLoading(true)
         const response = await axios.get(`/api/users/me`);
         console.log(response);
         setFeedback({
@@ -56,6 +57,9 @@ const UserFeedback = () => {
         });
       } catch (error: any) {
         console.log('Get user details failed', error.message);
+      }
+      finally{
+        setLoading(false)
       }
     };
     getUserDetails();
@@ -114,7 +118,11 @@ const UserFeedback = () => {
           src={require('../../assets/images/PS-logo.png')}
           alt="PS logo"
         />
-        {feedback.username ? (
+        {loading?<div className="loader-used">
+                <div className="text-loader"></div>
+                <div className="text-loader"></div>
+                </div>
+            :feedback.username ? (
           <div className="relative pointer">
             <div className="align-center" onClick={() => setNav(!nav)}>
               <div className="user-border">
@@ -167,6 +175,8 @@ const UserFeedback = () => {
               </h1>
             </div>
             <form onSubmit={onSubmit} className="row-gap row-gap_20">
+            {loading?<div className='input-loader' ><div className='text-loader' ></div></div>:
+              <>
               <label htmlFor="username">Username</label>
               <input
                 className=""
@@ -176,8 +186,10 @@ const UserFeedback = () => {
                 value={'' + feedback.username}
                 placeholder="Username"
                 required
-              />
-
+              /></>}
+              
+              {loading?<div className='input-loader' ><div className='text-loader' ></div></div>:
+<>
               <label htmlFor="email">Email</label>
               <input
                 className=""
@@ -188,6 +200,7 @@ const UserFeedback = () => {
                 placeholder="Email"
                 required
               />
+              </>}
 
               <label>Rating:</label>
               <div className="align-center rating_wrapper">
