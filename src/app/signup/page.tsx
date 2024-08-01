@@ -125,22 +125,30 @@ const SignUp = () => {
             <div className="rectangular-box highlight"></div>
           </div>
           <form onSubmit={onSignUp} className="row-gap row-gap_20">
-            <label htmlFor="username">Username</label>
-            <input
-              className=""
-              id="username"
-              type="text"
-              value={user.username}
-              placeholder="Username"
-              required
-              onChange={(e) => setUser({ ...user, username: e.target.value })}
-            />
+            <div>
+              <label htmlFor="username">Username</label>
+              <input
+                className=""
+                id="username"
+                type="text"
+                pattern="\w{2,10}"
+                value={user.username}
+                placeholder="Username"
+                required
+                onChange={(e) => setUser({ ...user, username: e.target.value })}
+              />
+              <p className="validation-error">
+                Username must be between 2-10 characters, can contain
+                alphanumeric and underscore only.
+              </p>
+            </div>
 
             <label htmlFor="email">Email</label>
             <input
               className=""
               id="email"
               type="text"
+              pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
               value={user.email}
               placeholder="Email"
               required
@@ -175,16 +183,23 @@ const SignUp = () => {
               <label className="no-hide">Admin</label>
             </div>
 
-            <label htmlFor="password">Password</label>
-            <input
-              className=""
-              id="password"
-              type="password"
-              value={user.password}
-              required
-              placeholder="Password"
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
-            />
+            <div>
+              <label htmlFor="password">Password</label>
+              <input
+                className=""
+                id="password"
+                type="password"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                value={user.password}
+                required
+                placeholder="Password"
+                onChange={(e) => setUser({ ...user, password: e.target.value })}
+              />
+              <p className="validation-error">
+                must contain 8 or more characters that are of at least one
+                number, and one uppercase and lowercase letter
+              </p>
+            </div>
 
             <label htmlFor="password">Confirm Password</label>
             <input

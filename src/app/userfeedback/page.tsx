@@ -194,6 +194,7 @@ const UserFeedback = () => {
                   <input
                     id="username"
                     type="text"
+                    pattern="\w{2,10}"
                     disabled
                     value={'' + feedback.username}
                     placeholder="Username"
@@ -212,6 +213,7 @@ const UserFeedback = () => {
                   <input
                     id="email"
                     type="text"
+                    pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                     disabled
                     value={'' + feedback.email}
                     placeholder="Email"

@@ -478,18 +478,24 @@ const Setting = () => {
                     }
                   />
 
-                  <label htmlFor="password">Password</label>
-                  <input
-                    className=""
-                    id="password"
-                    type="password"
-                    value={user.password}
-                    required
-                    placeholder="Password"
-                    onChange={(e) =>
-                      setUser({ ...user, password: e.target.value })
-                    }
-                  />
+                  <div>
+                    <label htmlFor="password">Password</label>
+                    <input
+                      className=""
+                      id="password"
+                      type="password"
+                      value={user.password}
+                      required
+                      placeholder="Password"
+                      onChange={(e) =>
+                        setUser({ ...user, password: e.target.value })
+                      }
+                    />
+                    <p className="validation-error">
+                      must contain 8 or more characters that are of at least one
+                      number, and one uppercase and lowercase letter
+                    </p>
+                  </div>
 
                   <label htmlFor="password">Confirm Password</label>
                   <input
