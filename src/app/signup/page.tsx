@@ -74,45 +74,48 @@ const SignUp = () => {
           alt="PS logo"
         />
       </header>
-      <aside className="padding-around-global side-width mob-hide">
-        <header>
-          <Image
-            className="PS-logo"
-            src={require('../../assets/images/PS-logo.png')}
-            alt="PS logo"
-          />
-        </header>
-        <main className="row-gap row-gap_20 main__wrapper mob-hide padding-fixer-top padding-fixer-bottom">
-          <ul className="bullet_list_items row-gap row-gap_20">
-            <li className="align-center">
-              <div className="bullet purple"></div>
-              <p>Your Voice Matters</p>
-            </li>
-            <li className="align-center">
-              <div className="bullet lighter-purple"></div>
-              <p>Real Impact</p>
-            </li>
-            <li className="align-center">
-              <div className="bullet light-purple"></div>
-              <p>Easy Participation</p>
-            </li>
-            <li className="align-center">
-              <div className="bullet highlight"></div>
-              <p>Personalized Experience</p>
-            </li>
-          </ul>
-          <div className="row-gap row-gap row-gap_10">
-            <h3 className="text-23x1 black-medium">S-2100</h3>
-            <p>Over 2,100 responses have been collected from users.</p>
-          </div>
-        </main>
+      <aside className="side-width mob-hide">
+        <div className="max-height-inner max-height row-gap">
+          <header className="padding-around-global">
+            <Image
+              className="PS-logo"
+              src={require('../../assets/images/PS-logo.png')}
+              alt="PS logo"
+            />
+          </header>
+          <main className="row-gap_40 main__wrapper padding-around-global">
+            <ul className="bullet_list_items row-gap_20 full-width-desktop">
+              <li className="align-center">
+                <div className="bullet purple"></div>
+                <p>Your Voice Matters</p>
+              </li>
+              <li className="align-center">
+                <div className="bullet lighter-purple"></div>
+                <p>Real Impact</p>
+              </li>
+              <li className="align-center">
+                <div className="bullet light-purple"></div>
+                <p>Easy Participation</p>
+              </li>
+              <li className="align-center">
+                <div className="bullet highlight"></div>
+                <p>Personalized Experience</p>
+              </li>
+            </ul>
+            <div className="row-gap row-gap row-gap_10">
+              <h3 className="text-23x1 black-medium">
+                Feedback Shapes Better Outcomes
+              </h3>
+            </div>
+          </main>
+        </div>
       </aside>
-      <div className="flex__1 main__wrapper padding-around-global scrollable padding-fixer-top padding-fixer-bottom">
+      <div className="flex__1 main__wrapper padding-around-global scrollable max-height-inner">
         <div className="form__white row-gap row-gap_20 padding-around-global">
           <div className="align-center signup__heading">
             <FeedbackSubmission />
             <h1 className="text-1x1 black-regular">
-              Signup to share your thoughts
+              Sign up to share your thoughts
             </h1>
           </div>
           <div className="boxes align-center">
@@ -200,7 +203,7 @@ const SignUp = () => {
                 className="align-center text-1x1"
                 disabled={buttonDisabled}
               >
-                <span className="black-regular">Signing up</span>{' '}
+                <span className="black-regular">Signing Up</span>{' '}
                 <i className="loader"></i>
               </button>
             ) : (
@@ -222,6 +225,26 @@ const SignUp = () => {
             </Link>
           </p>
         </div>
+      </div>
+      <div className="side-width full-width desktop-hide tab-hide">
+        <ul className="bullet_list_items row-gap row-gap_20 smaller-row-gap">
+          <li className="align-center">
+            <div className="bullet purple"></div>
+            <p>Your Voice Matters</p>
+          </li>
+          <li className="align-center">
+            <div className="bullet lighter-purple"></div>
+            <p>Real Impact</p>
+          </li>
+          <li className="align-center">
+            <div className="bullet light-purple"></div>
+            <p>Easy Participation</p>
+          </li>
+          <li className="align-center">
+            <div className="bullet highlight"></div>
+            <p>Personalized Experience</p>
+          </li>
+        </ul>
       </div>
     </div>
   );

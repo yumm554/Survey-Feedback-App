@@ -8,6 +8,13 @@ body {
   border-radius: 200px;
 }
 
+.side-width-feedback {
+  width: 220px;
+}
+.feedback_wrapper.align-center {
+  justify-content: center;
+}
+
 .absolute-back-container {
   position: absolute;
   z-index: -1;
@@ -33,7 +40,7 @@ body {
   z-index: -1;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 1100px) {
   .rating_wrapper {
     flex-wrap: wrap;
   }

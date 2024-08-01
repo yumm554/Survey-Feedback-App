@@ -4,7 +4,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import './userFeedback.css';
 import {
   SubmitFeedback,
@@ -16,6 +16,7 @@ import {
   Settings,
 } from '@/assets/icons/getIcon';
 import { useRouter } from 'next/navigation';
+import logout from '@/handlers/logout';
 
 interface Feedback {
   username: string;
@@ -26,6 +27,7 @@ interface Feedback {
 }
 
 const UserFeedback = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
@@ -46,7 +48,7 @@ const UserFeedback = () => {
   useEffect(() => {
     const getUserDetails = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         const response = await axios.get(`/api/users/me`);
         console.log(response);
         setFeedback({
@@ -57,9 +59,8 @@ const UserFeedback = () => {
         });
       } catch (error: any) {
         console.log('Get user details failed', error.message);
-      }
-      finally{
-        setLoading(false)
+      } finally {
+        setLoading(false);
       }
     };
     getUserDetails();
@@ -77,6 +78,23 @@ const UserFeedback = () => {
       setButtonDisabled(true);
     }
   }, [feedback]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      if (!target.closest('.hamburger')) {
+        console.log('in');
+        setNav(false);
+      }
+    };
+
+    window.addEventListener('click', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,18 +116,6 @@ const UserFeedback = () => {
     }
   };
 
-  const router = useRouter();
-  const logout = async () => {
-    try {
-      await axios.get(`/api/users/logout`);
-      toast.success('Successfully Logged Out');
-      router.push('/login');
-    } catch (error: any) {
-      console.log(error.message);
-      toast.error(error.message);
-    }
-  };
-
   return (
     <div>
       <header className="space-between padding-around-global">
@@ -118,13 +124,17 @@ const UserFeedback = () => {
           src={require('../../assets/images/PS-logo.png')}
           alt="PS logo"
         />
-        {loading?<div className="loader-used">
-                <div className="text-loader"></div>
-                <div className="text-loader"></div>
-                </div>
-            :feedback.username ? (
+        {loading && !feedback.comments ? (
+          <div className="loader-used">
+            <div className="text-loader"></div>
+            <div className="text-loader"></div>
+          </div>
+        ) : (
           <div className="relative pointer">
-            <div className="align-center" onClick={() => setNav(!nav)}>
+            <div
+              className="align-center hamburger"
+              onClick={() => setNav(!nav)}
+            >
               <div className="user-border">
                 <User />
               </div>
@@ -145,25 +155,24 @@ const UserFeedback = () => {
                   <span className="black-regular">Settings</span>
                 </Link>
                 <div className="hr"></div>
-                <div className="align-center pointer" onClick={logout}>
+                <div
+                  className="align-center pointer"
+                  onClick={() => logout(router)}
+                >
                   <span className="black-regular">Logout</span> <NavArrow />
                 </div>
               </div>
             )}
           </div>
-        ) : (
-          <Link href="/login" className="no-underline align-center">
-            <span className="black-regular">Login</span> <NavArrow />
-          </Link>
         )}
       </header>
-      <div className="col__flex tab__col padding-around-global align-center mob__col mob__col-gap padding-fixer-bottom">
-        <div className="side-width full-width">
+      <div className="col__flex tab__col padding-around-global feedback_wrapper align-center mob__col mob__col-gap">
+        <div className="full-width side-width-feedback full-width">
           <h3 className="tab-text-align text-23x1 black-medium">
             Submit the Survey Feedback Form
           </h3>
         </div>
-        <div className="justify-top flex__1 main__wrapper feedback relative">
+        <div className="justify-top main__wrapper feedback relative">
           <div className="absolute-back-container">
             <FeedbackFormBack />
           </div>
@@ -175,37 +184,46 @@ const UserFeedback = () => {
               </h1>
             </div>
             <form onSubmit={onSubmit} className="row-gap row-gap_20">
-            {loading?<div className='input-loader' ><div className='text-loader' ></div></div>:
-              <>
-              <label htmlFor="username">Username</label>
-              <input
-                className=""
-                id="username"
-                type="text"
-                disabled
-                value={'' + feedback.username}
-                placeholder="Username"
-                required
-              /></>}
-              
-              {loading?<div className='input-loader' ><div className='text-loader' ></div></div>:
-<>
-              <label htmlFor="email">Email</label>
-              <input
-                className=""
-                id="email"
-                type="text"
-                disabled
-                value={'' + feedback.email}
-                placeholder="Email"
-                required
-              />
-              </>}
+              {loading && !feedback.comments ? (
+                <div className="input-loader">
+                  <div className="text-loader"></div>
+                </div>
+              ) : (
+                <>
+                  <label htmlFor="username">Username</label>
+                  <input
+                    id="username"
+                    type="text"
+                    disabled
+                    value={'' + feedback.username}
+                    placeholder="Username"
+                    required
+                  />
+                </>
+              )}
+
+              {loading && !feedback.comments ? (
+                <div className="input-loader">
+                  <div className="text-loader"></div>
+                </div>
+              ) : (
+                <>
+                  <label htmlFor="email">Email</label>
+                  <input
+                    id="email"
+                    type="text"
+                    disabled
+                    value={'' + feedback.email}
+                    placeholder="Email"
+                    required
+                  />
+                </>
+              )}
 
               <label>Rating:</label>
               <div className="align-center rating_wrapper">
                 <div
-                  className={`rating-box align-center lighter-green ${
+                  className={`rating-box align-center green ${
                     feedback.rating === 5 ? 'active' : ''
                   }`}
                   onClick={() => handleRatingClick(5)}
@@ -257,7 +275,6 @@ const UserFeedback = () => {
 
               <label htmlFor="comments">Comments</label>
               <textarea
-                className=""
                 id="comments"
                 rows={6}
                 value={feedback.comments}
@@ -267,7 +284,7 @@ const UserFeedback = () => {
                   setFeedback({ ...feedback, comments: e.target.value })
                 }
               />
-              {loading ? (
+              {loading && feedback.email ? (
                 <button
                   className="align-center text-1x1"
                   disabled={buttonDisabled}
@@ -286,7 +303,7 @@ const UserFeedback = () => {
             {success && <p className="success text-09x1">{success}</p>}
           </div>
         </div>
-        <div className="side-width full-width">
+        <div className="side-width-feedback full-width">
           <ul className="bullet_list_items row-gap row-gap_20 smaller-row-gap">
             <li className="align-center">
               <div className="bullet red"></div>

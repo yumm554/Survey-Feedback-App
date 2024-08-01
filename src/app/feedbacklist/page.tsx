@@ -110,17 +110,17 @@ const FeedbackList: React.FC = () => {
             onClick={() => setMobNav(!mobNav)}
           ></div>
 
-          <aside className="relative side-width padding-around-global feedback-sidebar desktop-hide">
-            <header>
+          <aside className="relative side-width feedback-sidebar desktop-hide">
+            <header className="padding-around-global">
               <Image
                 className="PS-logo"
                 src={require('../../assets/images/PS-logo.png')}
                 alt="PS logo"
               />
             </header>
-            <main>
+            <main className="sidebar-padding-around">
               <nav>
-                <ul className="bullet_list_items row-gap_10">
+                <ul className="nav_list_items row-gap_10">
                   <li className="align-center pointer">
                     <Dashboard />
                     <p>Dasboard</p>
@@ -171,18 +171,18 @@ const FeedbackList: React.FC = () => {
             onClick={() => setMobNav(!mobNav)}
           ></div>
 
-          <aside className="relative side-width padding-around-global feedback-sidebar mob-hide tab-hide">
-            <header>
+          <aside className="relative side-width feedback-sidebar mob-hide tab-hide">
+            <header className="padding-around-global">
               <Image
                 className="PS-logo"
                 src={require('../../assets/images/PS-logo.png')}
                 alt="PS logo"
               />
             </header>
-            <main>
+            <main className="sidebar-padding-around">
               <nav>
                 {loading ? (
-                  <ul className="bullet_list_items row-gap_10">
+                  <ul className="nav_list_items row-gap_10">
                     <li>
                       <p className="text-loader"></p>
                     </li>
@@ -197,7 +197,7 @@ const FeedbackList: React.FC = () => {
                     </li>
                   </ul>
                 ) : (
-                  <ul className="bullet_list_items row-gap_10">
+                  <ul className="nav_list_items row-gap_10">
                     <li className="align-center pointer">
                       <Dashboard />
                       <p>Dasboard</p>
