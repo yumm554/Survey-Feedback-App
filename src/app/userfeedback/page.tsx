@@ -14,11 +14,13 @@ import {
   FeedbackFormBack,
   RatingStar,
   Settings,
+  Arrow,
 } from '@/assets/icons/getIcon';
 import { useRouter } from 'next/navigation';
 import logout from '@/handlers/logout';
 
 interface Feedback {
+  name: string;
   username: string;
   email: string;
   role: number;
@@ -34,6 +36,7 @@ const UserFeedback = () => {
   const [nav, setNav] = useState<boolean>(false);
 
   const [feedback, setFeedback] = useState<Feedback>({
+    name: '',
     username: '',
     email: '',
     role: 1,
@@ -68,7 +71,7 @@ const UserFeedback = () => {
 
   useEffect(() => {
     if (
-      feedback.username &&
+      feedback.name &&
       feedback.email &&
       feedback.rating &&
       feedback.comments
@@ -144,6 +147,15 @@ const UserFeedback = () => {
                   {feedback.role === 0 ? 'User' : 'Admin'}
                 </span>
               </div>
+              {nav ? (
+                <div className="rotated">
+                  <Arrow />
+                </div>
+              ) : (
+                <div>
+                  <Arrow />
+                </div>
+              )}
             </div>
             {nav && (
               <div className="popup padding-around-global row-gap row-gap_20">
@@ -184,24 +196,17 @@ const UserFeedback = () => {
               </h1>
             </div>
             <form onSubmit={onSubmit} className="row-gap row-gap_20">
-              {loading && !feedback.comments ? (
-                <div className="input-loader">
-                  <div className="text-loader"></div>
-                </div>
-              ) : (
-                <>
-                  <label htmlFor="username">Username</label>
-                  <input
-                    id="username"
-                    type="text"
-                    pattern="\w{2,10}"
-                    disabled
-                    value={'' + feedback.username}
-                    placeholder="Username"
-                    required
-                  />
-                </>
-              )}
+              <label htmlFor="name">Name</label>
+              <input
+                id="name"
+                type="text"
+                value={feedback.name}
+                placeholder="Full Name"
+                required
+                onChange={() =>
+                  setFeedback({ ...feedback, name: feedback.name })
+                }
+              />
 
               {loading && !feedback.comments ? (
                 <div className="input-loader">
@@ -215,7 +220,7 @@ const UserFeedback = () => {
                     type="text"
                     pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                     disabled
-                    value={'' + feedback.email}
+                    value={feedback.email}
                     placeholder="Email"
                     required
                   />

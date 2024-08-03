@@ -7,7 +7,7 @@ import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Dashboard, SignIn } from '../../assets/icons/getIcon';
+import { Dashboard, Eye, EyeSlash, SignIn } from '../../assets/icons/getIcon';
 
 const Login = () => {
   const router = useRouter();
@@ -19,6 +19,7 @@ const Login = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -99,75 +100,79 @@ const Login = () => {
           </main>
         </div>
       </aside>
-      <div className="flex__1 main__wrapper padding-around-global scrollable max-height-inner">
-        <div className="form__white row-gap row-gap_20 padding-around-global">
-          <div className="align-center signup__heading">
-            <Dashboard />
-            <h1 className="text-1x1 black-regular">
-              Log in to submit feedback
-            </h1>
-          </div>
-          <div className="boxes align-center">
-            <div className="rectangular-box yellow"></div>
-            <div className="rectangular-box lighter-yellow"></div>
-            <div className="rectangular-box light-yellow"></div>
-            <div className="rectangular-box highlight"></div>
-          </div>
+      <div className="scrollable max-height max-height-inner full-width-desktop padding-around-global">
+        <div className="main__wrapper full-width-desktop flex__1 full-height-desktop">
+          <div className="form__white row-gap row-gap_20 padding-around-global">
+            <div className="align-center signup__heading">
+              <Dashboard />
+              <h1 className="text-1x1 black-regular">
+                Log in to submit feedback
+              </h1>
+            </div>
+            <div className="boxes align-center">
+              <div className="rectangular-box yellow"></div>
+              <div className="rectangular-box lighter-yellow"></div>
+              <div className="rectangular-box light-yellow"></div>
+              <div className="rectangular-box highlight"></div>
+            </div>
 
-          <form onSubmit={onLogin} className="row-gap row-gap_20">
-            <label htmlFor="email">Email</label>
-            <input
-              className=""
-              id="email"
-              type="text"
-              value={user.email}
-              placeholder="Email"
-              required
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
-            />
+            <form onSubmit={onLogin} className="row-gap row-gap_20">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="text"
+                value={user.email}
+                placeholder="Email"
+                required
+                onChange={(e) => setUser({ ...user, email: e.target.value })}
+              />
 
-            <label htmlFor="password">Password</label>
-            <input
-              className=""
-              id="password"
-              type="password"
-              value={user.password}
-              required
-              placeholder="Password"
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
-            />
-            {/* <span
-            className="text-09x1"
-            onClick={async () => router.push('/forgotpassword')}
-          >
-            Forget Password ?
-          </span> */}
-            {loading ? (
-              <button
-                className="align-center text-1x1"
-                disabled={buttonDisabled}
+              <div className="relative">
+                <label htmlFor="password">Password</label>
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={user.password}
+                  required
+                  placeholder="Password"
+                  onChange={(e) =>
+                    setUser({ ...user, password: e.target.value })
+                  }
+                />
+                <span
+                  className="show-password-icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <Eye /> : <EyeSlash />}
+                </span>
+              </div>
+              {loading ? (
+                <button
+                  className="align-center text-1x1"
+                  disabled={buttonDisabled}
+                >
+                  <span className="black-regular">Logging In</span>{' '}
+                  <i className="loader"></i>
+                </button>
+              ) : (
+                <button className="align-center text-1x1">
+                  <span className="black-regular">Log In</span> <SignIn />
+                </button>
+              )}
+            </form>
+            {error && <p className="error text-09x1">{error}</p>}
+            {success && <p className="success text-09x1">{success}</p>}
+
+            <p className="align-center text-09x1 centralize">
+              <span>Don't have an account?</span>
+              <Link
+                href="/signup"
+                className="p-2  mb-4 focus:outline-none focus:border-gray-600 text-gray-500"
               >
-                <span className="black-regular">Logging In</span>{' '}
-                <i className="loader"></i>
-              </button>
-            ) : (
-              <button className="align-center text-1x1">
-                <span className="black-regular">Log In</span> <SignIn />
-              </button>
-            )}
-          </form>
-          {error && <p className="error text-09x1">{error}</p>}
-          {success && <p className="success text-09x1">{success}</p>}
-
-          <p className="align-center text-09x1 centralize">
-            <span>Don't have an account?</span>
-            <Link
-              href="/signup"
-              className="p-2  mb-4 focus:outline-none focus:border-gray-600 text-gray-500"
-            >
-              Signup
-            </Link>
-          </p>
+                Signup
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
       <div className="side-width full-width desktop-hide tab-hide">

@@ -1,3 +1,6 @@
+body * {
+  box-sizing: border-box;
+}
 body {
   margin: 0;
   letter-spacing: 0.2px;
@@ -36,16 +39,6 @@ body {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   z-index: 9999999;
-}
-
-.popup:after {
-  text-shadow: -0px -5px 5px rgba(0, 0, 0, 0.1);
-  right: 25px;
-  top: -14px;
-  content: '▲';
-  color: #fff;
-  position: absolute;
-  pointer-events: none;
 }
 
 .error {
@@ -137,8 +130,12 @@ textarea {
   padding: 1.2rem;
   border-radius: 5px;
   border: 1px solid var(--border);
-  width: 450px;
   background: transparent;
+  width: 450px;
+}
+
+.input {
+  width: fit-content;
 }
 
 input[type='checkbox'] {
@@ -396,7 +393,7 @@ aside main {
 }
 
 .max-height-inner {
-  max-height: 700px;
+  max-height: 800px;
 }
 
 .scrollable {
@@ -450,6 +447,23 @@ ul li {
 .full-width-desktop {
   width: -webkit-fill-available !important;
 }
+.full-height-desktop {
+  min-height: 100%;
+  height: max-content !important;
+}
+.show-password-icon {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+}
+.ellipses {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rotated {
+  transform: rotate(180deg);
+}
 
 @media screen and (max-width: 1024px) and (min-width: 768px) {
   .validation-error {
@@ -460,7 +474,8 @@ ul li {
   }
 
   input:not([type='checkbox']),
-  textarea {
+  textarea,
+  .input {
     width: -webkit-fill-available;
   }
   .tab__col {
@@ -502,7 +517,8 @@ ul li {
     width: -webkit-fill-available;
   }
   input:not([type='checkbox']),
-  textarea {
+  textarea,
+  .input {
     width: -webkit-fill-available;
   }
   .mob-hide {

@@ -10,7 +10,7 @@ dbConnect();
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { username, email, role, password } = reqBody;
+    const { username, email, role, key, password } = reqBody;
 
     if (!username || !email || !password) {
       return NextResponse.json(
@@ -19,11 +19,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    //check if key is correct
+    if (key !== 'ZF65WD490') {
+      return NextResponse.json(
+        { error: { message: 'Key is not valid', type: 1 } },
+        { status: 400 }
+      );
+    }
+
     // check if user already exists
     const user = await User.findOne({ email });
     if (user) {
       return NextResponse.json(
-        { error: { message: 'User already exists', type: 1 } },
+        { error: { message: 'User already exists', type: 2 } },
         { status: 400 }
       );
     }
@@ -31,7 +39,7 @@ export async function POST(request: NextRequest) {
     const existingUsernameUser = await User.findOne({ username });
     if (existingUsernameUser) {
       return NextResponse.json(
-        { error: { message: 'Username is already taken', type: 2 } },
+        { error: { message: 'Username is already taken', type: 3 } },
         { status: 400 }
       );
     }

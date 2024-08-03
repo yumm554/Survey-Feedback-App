@@ -1,10 +1,10 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const feedbackSchema = new mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
-      required: [true, 'Username is required'],
+      required: [true, 'Name is required'],
     },
     email: {
       type: String,
@@ -24,9 +24,9 @@ const feedbackSchema = new mongoose.Schema(
   {
     timestamps: true, // Add createdAt and updatedAt timestamps
   }
-)
+);
 
 const Feedback =
-  mongoose.models.feedbacks || mongoose.model('feedbacks', feedbackSchema)
+  mongoose.models.feedbacks || mongoose.model('feedbacks', feedbackSchema);
 
-export default Feedback
+export default Feedback;

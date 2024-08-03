@@ -20,6 +20,8 @@ import {
   User,
   SubmitFeedback,
   Overview,
+  EyeSlash,
+  Eye,
 } from '../../assets/icons/getIcon';
 import toast from 'react-hot-toast';
 
@@ -50,6 +52,9 @@ const Setting = () => {
   const [desktopNav, setDesktopNav] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isDelete, setIsDelete] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (
@@ -432,12 +437,12 @@ const Setting = () => {
                   )}
                 </div>
 
-                <div className="row-gap row-gap_10 flex__1">
+                <div className="row-gap row-gap_10 flex__1 full-width">
                   <span className="grey-medium text-09x1">Email</span>
                   {loading && !user.password_confirmation ? (
                     <div className="text-loader"></div>
                   ) : (
-                    <p>{user.email}</p>
+                    <p className="ellipses">{user.email}</p>
                   )}
                 </div>
 
@@ -467,7 +472,6 @@ const Setting = () => {
                 >
                   <label htmlFor="password">Old Password</label>
                   <input
-                    className=""
                     id="password"
                     type="password"
                     value={user.old_password}
@@ -478,12 +482,11 @@ const Setting = () => {
                     }
                   />
 
-                  <div>
+                  <div className="relative input">
                     <label htmlFor="password">Password</label>
                     <input
-                      className=""
                       id="password"
-                      type="password"
+                      type={showPassword ? 'text' : 'password'}
                       value={user.password}
                       required
                       placeholder="Password"
@@ -491,27 +494,43 @@ const Setting = () => {
                         setUser({ ...user, password: e.target.value })
                       }
                     />
+                    <span
+                      className="show-password-icon"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <Eye /> : <EyeSlash />}
+                    </span>
                     <p className="validation-error">
                       must contain 8 or more characters that are of at least one
                       number, and one uppercase and lowercase letter
                     </p>
                   </div>
 
-                  <label htmlFor="password">Confirm Password</label>
-                  <input
-                    className=""
-                    id="password_confirmation"
-                    type="password"
-                    value={user.password_confirmation}
-                    placeholder="Confirm Password"
-                    required
-                    onChange={(e) =>
-                      setUser({
-                        ...user,
-                        password_confirmation: e.target.value,
-                      })
-                    }
-                  />
+                  <div className="relative input">
+                    <label htmlFor="password">Confirm Password</label>
+                    <input
+                      id="password_confirmation"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      value={user.password_confirmation}
+                      placeholder="Confirm Password"
+                      required
+                      onChange={(e) =>
+                        setUser({
+                          ...user,
+                          password_confirmation: e.target.value,
+                        })
+                      }
+                    />
+                    <span
+                      className="show-password-icon"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    >
+                      {showConfirmPassword ? <Eye /> : <EyeSlash />}
+                    </span>
+                  </div>
+
                   {loading && user.password_confirmation ? (
                     <button
                       className="align-center text-1x1"
