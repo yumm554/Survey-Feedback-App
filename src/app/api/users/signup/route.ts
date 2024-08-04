@@ -2,7 +2,6 @@ import bcryptjs from 'bcryptjs';
 import { NextRequest, NextResponse } from 'next/server';
 
 import User from '@/models/userModel';
-import { sendEmail } from '@/helpers/mailer';
 import { dbConnect } from '@/dbConfig/dbConfig';
 
 dbConnect();
@@ -12,6 +11,7 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { username, email, role, key, password } = reqBody;
 
+    //check if required fields are not empty
     if (!username || !email || !password) {
       return NextResponse.json(
         { error: { message: 'Fill all the required fields', type: 0 } },
@@ -19,8 +19,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    //check if key is not empty
+    if (role === 1 && !key) {
+      return NextResponse.json(
+        { error: { message: 'Key is required', type: 0 } },
+        { status: 400 }
+      );
+    }
+
     //check if key is correct
-    if (key !== 'ZF65WD490') {
+    if (role === 1 && key !== 'ZF65WD490') {
       return NextResponse.json(
         { error: { message: 'Key is not valid', type: 1 } },
         { status: 400 }
@@ -58,10 +66,6 @@ export async function POST(request: NextRequest) {
     const savedUser = await newUser.save();
     console.log('user', newUser);
     console.log({ savedUser });
-
-    //send verification email
-
-    await sendEmail({ email, emailType: 'VERIFY', userId: savedUser._id });
 
     return NextResponse.json({
       message: 'User created successfully',

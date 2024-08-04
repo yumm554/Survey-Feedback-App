@@ -38,7 +38,7 @@ body {
   background: #fff;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   border-radius: 6px;
-  z-index: 9999999;
+  z-index: 99999999;
 }
 
 .error {
@@ -230,7 +230,6 @@ input:disabled {
 }
 
 .PS-logo {
-  width: 70px;
   height: auto;
 }
 
@@ -474,9 +473,11 @@ ul li {
   }
 
   input:not([type='checkbox']),
-  textarea,
-  .input {
+  textarea {
     width: -webkit-fill-available;
+  }
+  .input {
+    width: 50%;
   }
   .tab__col {
     flex-direction: column;
@@ -521,6 +522,7 @@ ul li {
   .input {
     width: -webkit-fill-available;
   }
+
   .mob-hide {
     display: none;
   }

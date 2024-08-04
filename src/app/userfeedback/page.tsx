@@ -1,27 +1,20 @@
 'use client';
 
-import axios from 'axios';
-import Link from 'next/link';
-import Image from 'next/image';
-import { toast } from 'react-hot-toast';
-import { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import './userFeedback.css';
 import {
   SubmitFeedback,
   Dashboard,
-  NavArrow,
-  User,
   FeedbackFormBack,
   RatingStar,
-  Settings,
-  Arrow,
 } from '@/assets/icons/getIcon';
-import { useRouter } from 'next/navigation';
-import logout from '@/handlers/logout';
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
+import GetUserDetails from '@/handlers/me';
+import useFeedbackForm from '@/handlers/feedbackForm';
 
 interface Feedback {
   name: string;
-  username: string;
   email: string;
   role: number;
   rating: number;
@@ -29,155 +22,59 @@ interface Feedback {
 }
 
 const UserFeedback = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
-  const [nav, setNav] = useState<boolean>(false);
+  const [mobNav, setMobNav] = useState<boolean>(false);
 
   const [feedback, setFeedback] = useState<Feedback>({
     name: '',
-    username: '',
     email: '',
     role: 1,
     rating: 3,
     comments: '',
   });
-  const [buttonDisabled, setButtonDisabled] = useState(true);
   const handleRatingClick = (rating: number) => {
     setFeedback({ ...feedback, rating });
-    console.log(feedback.rating);
   };
-  useEffect(() => {
-    const getUserDetails = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`/api/users/me`);
-        console.log(response);
-        setFeedback({
-          ...feedback,
-          username: response.data?.user.username,
-          email: response.data?.user.email,
-          role: response.data?.user.role,
-        });
-      } catch (error: any) {
-        console.log('Get user details failed', error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getUserDetails();
-  }, []);
 
-  useEffect(() => {
-    if (
-      feedback.name &&
-      feedback.email &&
-      feedback.rating &&
-      feedback.comments
-    ) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [feedback]);
+  //me call
+  const { user, isAdmin, isLoading } = GetUserDetails();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-
-      if (!target.closest('.hamburger')) {
-        console.log('in');
-        setNav(false);
-      }
-    };
-
-    window.addEventListener('click', handleClickOutside);
-
-    return () => {
-      window.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //form submit
+  const {
+    isFeedbackFormLoading,
+    isFeedbackFormError,
+    isFeedbackFormSuccess,
+    onSubmit,
+    disable,
+  } = useFeedbackForm();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      setSuccess('');
-      setError('');
-      setLoading(true);
-      const response = await axios.post(`/api/users/userfeedback`, feedback);
-      console.log('Submission success', response.data);
-      toast.success('Successfully Submitted');
-      setSuccess(response.data?.message);
-      setFeedback({ ...feedback, comments: '', rating: 3 });
-    } catch (error: any) {
-      console.log('Submission failed', error.message);
-      toast.error('An error occurred');
-      setError('An error occurred');
-    } finally {
-      setLoading(false);
-    }
+    setFeedback({ ...feedback, email: user.email });
+    console.log(feedback);
+    onSubmit(feedback, setFeedback);
   };
 
   return (
     <div>
-      <header className="space-between padding-around-global">
-        <Image
-          className="PS-logo"
-          src={require('../../assets/images/PS-logo.png')}
-          alt="PS logo"
-        />
-        {loading && !feedback.comments ? (
-          <div className="loader-used">
-            <div className="text-loader"></div>
-            <div className="text-loader"></div>
-          </div>
-        ) : (
-          <div className="relative pointer">
-            <div
-              className="align-center hamburger"
-              onClick={() => setNav(!nav)}
-            >
-              <div className="user-border">
-                <User />
-              </div>
-              <div>
-                <p>{feedback.username || 'Username'}</p>
-                <span className="grey-medium text-09x1">
-                  {feedback.role === 0 ? 'User' : 'Admin'}
-                </span>
-              </div>
-              {nav ? (
-                <div className="rotated">
-                  <Arrow />
-                </div>
-              ) : (
-                <div>
-                  <Arrow />
-                </div>
-              )}
-            </div>
-            {nav && (
-              <div className="popup padding-around-global row-gap row-gap_20">
-                <Link
-                  className="align-center pointer no-underline"
-                  href="/settings"
-                >
-                  <Settings />
-                  <span className="black-regular">Settings</span>
-                </Link>
-                <div className="hr"></div>
-                <div
-                  className="align-center pointer"
-                  onClick={() => logout(router)}
-                >
-                  <span className="black-regular">Logout</span> <NavArrow />
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </header>
+      <Sidebar
+        data={{
+          user,
+          mobNav,
+          setMobNav,
+          isLoading,
+          active: 'feedback',
+          sidebar: false,
+          isAdmin,
+        }}
+      />
+      <Header
+        data={{
+          user,
+          mobNav,
+          setMobNav,
+          isLoading,
+          sidebar: false,
+        }}
+      />
       <div className="col__flex tab__col padding-around-global feedback_wrapper align-center mob__col mob__col-gap">
         <div className="full-width side-width-feedback full-width">
           <h3 className="tab-text-align text-23x1 black-medium">
@@ -195,7 +92,7 @@ const UserFeedback = () => {
                 We Value Your Opinion - Fill Out Our Feedback Form
               </h1>
             </div>
-            <form onSubmit={onSubmit} className="row-gap row-gap_20">
+            <form onSubmit={handleSubmit} className="row-gap row-gap_20">
               <label htmlFor="name">Name</label>
               <input
                 id="name"
@@ -203,12 +100,12 @@ const UserFeedback = () => {
                 value={feedback.name}
                 placeholder="Full Name"
                 required
-                onChange={() =>
-                  setFeedback({ ...feedback, name: feedback.name })
+                onChange={(e) =>
+                  setFeedback({ ...feedback, name: e.target.value })
                 }
               />
 
-              {loading && !feedback.comments ? (
+              {isLoading ? (
                 <div className="input-loader">
                   <div className="text-loader"></div>
                 </div>
@@ -220,7 +117,7 @@ const UserFeedback = () => {
                     type="text"
                     pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                     disabled
-                    value={feedback.email}
+                    value={user.email}
                     placeholder="Email"
                     required
                   />
@@ -291,11 +188,8 @@ const UserFeedback = () => {
                   setFeedback({ ...feedback, comments: e.target.value })
                 }
               />
-              {loading && feedback.email ? (
-                <button
-                  className="align-center text-1x1"
-                  disabled={buttonDisabled}
-                >
+              {isFeedbackFormLoading ? (
+                <button className="align-center text-1x1" disabled={disable}>
                   <span className="black-regular">Submitting Feedback</span>{' '}
                   <i className="loader"></i>
                 </button>
@@ -306,8 +200,12 @@ const UserFeedback = () => {
                 </button>
               )}
             </form>
-            {error && <p className="error text-09x1">{error}</p>}
-            {success && <p className="success text-09x1">{success}</p>}
+            {isFeedbackFormError && (
+              <p className="error text-09x1">{isFeedbackFormError}</p>
+            )}
+            {isFeedbackFormSuccess && (
+              <p className="success text-09x1">{isFeedbackFormSuccess}</p>
+            )}
           </div>
         </div>
         <div className="side-width-feedback full-width">

@@ -311,7 +311,7 @@ export const Settings = () => {
   );
 };
 
-export const Logout = () => {
+export const Signout = () => {
   return (
     <i className="svg__icon logout">
       <svg

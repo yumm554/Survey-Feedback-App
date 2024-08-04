@@ -5,8 +5,7 @@ import type { NextRequest } from 'next/server';
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const isPublicUrl =
-    path === '/login' || path === '/signup' || path === '/verifyemail';
+  const isPublicUrl = path === '/login' || path === '/signup';
   const token = request.cookies.get('token')?.value || '';
 
   // Verify and decode the token if it exists

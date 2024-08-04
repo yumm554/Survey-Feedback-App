@@ -83,6 +83,7 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
     top: 0;
     left: 0;
     height: 100vh;
+    z-index: 99999999;
   }
   .mob-nav-overlay {
     width: 100vw;
@@ -123,6 +124,7 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
     top: 0;
     left: 0;
     height: 100vh;
+    z-index: 99999999;
   }
   .mob-nav-overlay {
     width: 100vw;

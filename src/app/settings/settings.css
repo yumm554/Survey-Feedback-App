@@ -23,13 +23,14 @@ body {
     top: 0;
     left: 0;
     height: 100vh;
+    z-index: 99999999;
   }
   .mob-nav-overlay {
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.2);
   }
-  .settings-form input {
-    width: 50%;
+  .settings-form-input {
+    width: 60% !important;
   }
 }
 
@@ -44,6 +45,7 @@ body {
     top: 0;
     left: 0;
     height: 100vh;
+    z-index: 99999999;
   }
   .mob-nav-overlay {
     width: 100vw;
