@@ -1,11 +1,8 @@
 'use client';
 
-import axios from 'axios';
 import Link from 'next/link';
 import './signup.css';
-import { toast } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Eye,
   EyeSlash,
@@ -27,7 +24,6 @@ interface User {
 }
 
 const SignUp = () => {
-  const router = useRouter();
   const [user, setUser] = useState<User>({
     username: '',
     email: '',
@@ -113,23 +109,28 @@ const SignUp = () => {
         onChange={(e) => setUser({ ...user, role: e.target.value })}
       /> */}
 
-              <label>Role:</label>
               <div className="align-center">
                 <input
                   type="checkbox"
+                  id="user"
                   value={0}
                   checked={user.role === 0}
                   onChange={() => setUser({ ...user, role: 0 })}
                 />
-                <label className="no-hide">User</label>
+                <label htmlFor="user" className="no-hide">
+                  User
+                </label>
 
                 <input
+                  id="admin"
                   type="checkbox"
                   value={1}
                   checked={user.role === 1}
                   onChange={() => setUser({ ...user, role: 1 })}
                 />
-                <label className="no-hide">Admin</label>
+                <label htmlFor="admin" className="no-hide">
+                  Admin
+                </label>
               </div>
 
               {user.role === 1 ? (
@@ -165,6 +166,7 @@ const SignUp = () => {
                 <span
                   className="show-password-icon"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label="toggle eye visibility"
                 >
                   {showPassword ? <Eye /> : <EyeSlash />}
                 </span>
@@ -175,7 +177,7 @@ const SignUp = () => {
               </div>
 
               <div className="relative input">
-                <label htmlFor="password">Confirm Password</label>
+                <label htmlFor="password_confirmation">Confirm Password</label>
                 <input
                   id="password_confirmation"
                   type={showConfirmPassword ? 'text' : 'password'}

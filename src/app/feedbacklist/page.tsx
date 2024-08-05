@@ -126,6 +126,7 @@ const FeedbackList: React.FC = () => {
                     ? 'disabled'
                     : '') + ' previous-pagination'
                 }
+                aria-label="prev button"
               >
                 <PaginationArrow />
               </span>
@@ -139,6 +140,7 @@ const FeedbackList: React.FC = () => {
                     ? 'disabled'
                     : ''
                 }
+                aria-label="next button"
               >
                 <PaginationArrow />
               </span>

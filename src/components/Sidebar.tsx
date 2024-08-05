@@ -15,7 +15,8 @@ import {
 import logout from '../handlers/logout';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import useDeleteAccount from '@/handlers/deleteAccount';
+import useLogout from '../handlers/logout';
 
 interface User {
   username: string;
@@ -40,30 +41,24 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
   const router = useRouter();
   const { user, mobNav, setMobNav, active, isLoading, sidebar, isAdmin } = data;
   const [isDelete, setIsDelete] = useState<boolean>(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
 
-  const onDelete = async () => {
-    try {
-      setError('');
-      setSuccess('');
-      setLoading(true);
-      const response = await axios.delete(`/api/users/deleteaccount`, {
-        data: { email: user.email },
-      });
-      console.log('Deletion success', response.data);
-      setSuccess('User deleted successfully');
-      router.push('/signup');
-    } catch (error: any) {
-      console.log(
-        'Deletion failed',
-        error?.response?.data?.error?.message || error.message
-      );
-      setError(error?.response?.data?.error?.message || 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
+  //handle logout
+  const {
+    isLogoutLoading,
+    isLogoutError,
+    isLogoutSuccess,
+    logoutDisable,
+    onLogout,
+  } = useLogout();
+  const handleLogout = async () => {
+    onLogout();
+  };
+
+  //handle delete account
+  const { disable, isDeleteLoading, isDeleteError, isDeleteSuccess, onDelete } =
+    useDeleteAccount();
+  const handleDelete = () => {
+    onDelete(user.email);
   };
 
   return (
@@ -156,12 +151,27 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
                         <p>Settings</p>
                       </Link>
                     </li>
-                    <li
-                      className="align-center pointer"
-                      onClick={() => logout(router)}
-                    >
-                      <Signout />
-                      <p>Logout</p>
+                    <li className="row-gap row-gap_10" onClick={handleLogout}>
+                      <div className="align-center pointer">
+                        <Signout />
+                        {isLogoutLoading ? (
+                          <span
+                            className={
+                              'align-center ' + logoutDisable ? 'disabled' : ''
+                            }
+                          >
+                            Logging Out
+                          </span>
+                        ) : (
+                          <span className="align-center">Logout</span>
+                        )}
+                      </div>
+                      {isLogoutError && (
+                        <p className="error text-09x1">{isLogoutError}</p>
+                      )}
+                      {isLogoutSuccess && (
+                        <p className="success text-09x1">{isLogoutSuccess}</p>
+                      )}
                     </li>
                     {active === 'feedback' ? (
                       ''
@@ -185,8 +195,12 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
                             {isDelete ? (
                               <div className="align-center">
                                 <span
-                                  className="delete-account"
-                                  onClick={onDelete}
+                                  className={
+                                    'delete-account ' + disable
+                                      ? 'disabled'
+                                      : ''
+                                  }
+                                  onClick={handleDelete}
                                 >
                                   Really Delete?
                                 </span>
@@ -206,11 +220,16 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
                               </span>
                             )}
                           </div>
-                          {error && isDelete && (
-                            <p className="error text-09x1">{error}</p>
+                          {isDeleteLoading && (
+                            <p className="error text-09x1">deleting...</p>
                           )}
-                          {success && isDelete && (
-                            <p className="success text-09x1">{success}</p>
+                          {isDeleteError && (
+                            <p className="error text-09x1">{isDeleteError}</p>
+                          )}
+                          {isDeleteSuccess && (
+                            <p className="success text-09x1">
+                              {isDeleteSuccess}
+                            </p>
                           )}
                         </li>
                       </>
@@ -308,12 +327,27 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
                       <p>Settings</p>
                     </Link>
                   </li>
-                  <li
-                    className="align-center pointer"
-                    onClick={() => logout(router)}
-                  >
-                    <Signout />
-                    <p>Logout</p>
+                  <li className="row-gap row-gap_10" onClick={handleLogout}>
+                    <div className="align-center pointer">
+                      <Signout />
+                      {isLogoutLoading ? (
+                        <span
+                          className={
+                            'align-center ' + logoutDisable ? 'disabled' : ''
+                          }
+                        >
+                          Logging Out
+                        </span>
+                      ) : (
+                        <span className="align-center">Logout</span>
+                      )}
+                    </div>
+                    {isLogoutError && (
+                      <p className="error text-09x1">{isLogoutError}</p>
+                    )}
+                    {isLogoutSuccess && (
+                      <p className="success text-09x1">{isLogoutSuccess}</p>
+                    )}
                   </li>
                   {active === 'settings' ? (
                     <>
@@ -324,8 +358,10 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
                           {isDelete ? (
                             <div className="align-center">
                               <span
-                                className="delete-account"
-                                onClick={onDelete}
+                                className={
+                                  'delete-account ' + disable ? 'disabled' : ''
+                                }
+                                onClick={handleDelete}
                               >
                                 Really Delete?
                               </span>
@@ -345,14 +381,14 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
                             </span>
                           )}
                         </div>
-                        {loading && isDelete && (
+                        {isDeleteLoading && (
                           <p className="error text-09x1">deleting...</p>
                         )}
-                        {error && isDelete && (
-                          <p className="error text-09x1">{error}</p>
+                        {isDeleteError && (
+                          <p className="error text-09x1">{isDeleteError}</p>
                         )}
-                        {success && isDelete && (
-                          <p className="success text-09x1">{success}</p>
+                        {isDeleteSuccess && (
+                          <p className="success text-09x1">{isDeleteSuccess}</p>
                         )}
                       </li>
                     </>

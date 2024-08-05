@@ -1,3 +1,5 @@
+'use client';
+
 interface HeadAsideProps {
   colors: Colors;
 }

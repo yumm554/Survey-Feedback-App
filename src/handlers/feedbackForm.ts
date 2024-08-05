@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 interface Feedback {
   name: string;
   email: string;
-  role: number;
   rating: number;
   comments: string;
 }

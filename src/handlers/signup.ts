@@ -39,8 +39,8 @@ const useSignup = () => {
         key: user.key,
         password: user.password,
       });
-      console.log('Signup success', response.data);
-      setSuccess('Successfully Signed Up');
+      console.log('Signup success');
+      setSuccess(response.data?.message);
       router.push('/login');
     } catch (error: any) {
       console.log(
@@ -50,6 +50,7 @@ const useSignup = () => {
       setError(error?.response?.data?.error?.message || 'An error occurred');
     } finally {
       setLoading(false);
+      setDisable(false);
     }
   };
 

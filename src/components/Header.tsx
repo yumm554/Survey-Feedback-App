@@ -1,3 +1,5 @@
+'use client';
+
 import { Hamburger, NavArrow, Settings } from '@/assets/icons/getIcon';
 import { User } from '../assets/icons/getIcon';
 import Image from 'next/image';
@@ -7,24 +9,6 @@ import { useEffect, useState } from 'react';
 const Header = ({ data }: any) => {
   const { user, mobNav, setMobNav, isLoading, sidebar } = data;
 
-  const [nav, setNav] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-
-      if (!target.closest('.hamburger')) {
-        setNav(false);
-      }
-    };
-
-    window.addEventListener('click', handleClickOutside);
-
-    return () => {
-      window.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
   return (
     <>
       <header className="header__white space-between padding-around-global">
@@ -32,6 +16,7 @@ const Header = ({ data }: any) => {
           <div
             className="mob__hamburger desktop-hide"
             onClick={() => setMobNav(!mobNav)}
+            aria-label="mob nav toggle"
           >
             <Hamburger />
           </div>
@@ -72,12 +57,12 @@ const Header = ({ data }: any) => {
             </div>
             <div className="loader-used">
               {isLoading ? (
-                <div className="text-loader"></div>
+                <div className="text-loader" aria-label="header loader"></div>
               ) : (
                 <p>{user.username || 'Username'}</p>
               )}
               {isLoading ? (
-                <div className="text-loader"></div>
+                <div className="text-loader" aria-label="header loader"></div>
               ) : (
                 <span className="grey-medium text-09x1">
                   {user.role === 0 ? 'User' : 'Admin'}

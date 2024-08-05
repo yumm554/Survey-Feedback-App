@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
@@ -11,8 +11,8 @@ const useLogin = () => {
   const router = useRouter();
   const [disable, setDisable] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
+  const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
 
   const onLogin = async (user: User) => {
     try {

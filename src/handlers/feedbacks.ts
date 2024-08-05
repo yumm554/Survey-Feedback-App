@@ -11,7 +11,6 @@ interface Feedback {
 
 interface Pagination {
   page: number;
-  limit: number;
   totalPages: number;
   totalFeedbacks: number;
 }
@@ -20,17 +19,16 @@ const useFetchFeedbacks = (page: number, limit: number) => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
-    limit: 10,
     totalPages: 1,
     totalFeedbacks: 0,
   });
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        setError(null);
+        setError('');
         setLoading(true);
         const response = await axios.get(
           `/api/users/feedbacks?page=${page}&limit=${limit}`

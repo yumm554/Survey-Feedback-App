@@ -68,9 +68,8 @@ export async function POST(request: NextRequest) {
     console.log({ savedUser });
 
     return NextResponse.json({
-      message: 'User created successfully',
+      message: 'Successfully Signed Up',
       success: true,
-      savedUser,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

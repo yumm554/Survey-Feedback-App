@@ -1,7 +1,5 @@
 'use client';
 
-import axios from 'axios';
-import Link from 'next/link';
 import './settings.css';
 import { useState } from 'react';
 import Sidebar from '../../components/Sidebar';
@@ -12,7 +10,6 @@ import {
   EyeSlash,
   Eye,
 } from '../../assets/icons/getIcon';
-import toast from 'react-hot-toast';
 import Header from '@/components/Header';
 import GetUserDetails from '@/handlers/me';
 import useChangePassword from '@/handlers/changePassword';
@@ -39,13 +36,13 @@ const Setting = () => {
 
   //form submit
   const {
-    onUpdate,
     isPasswordLoading,
     isPasswordError,
     isPasswordSuccess,
+    onUpdate,
     disable,
   } = useChangePassword();
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onUpdate(user.email, password, setPassword);
   };
@@ -77,7 +74,7 @@ const Setting = () => {
                 {isLoading ? (
                   <div className="text-loader"></div>
                 ) : (
-                  <p>{user.username}</p>
+                  <p aria-label="username">{user.username}</p>
                 )}
               </div>
 
@@ -97,7 +94,7 @@ const Setting = () => {
                 {isLoading ? (
                   <div className="text-loader align-right"></div>
                 ) : (
-                  <p className="align-right mob-no-right">
+                  <p className="align-right mob-no-right" aria-label="role">
                     {user.role === 0 ? 'User' : 'Admin'}
                   </p>
                 )}
@@ -111,13 +108,14 @@ const Setting = () => {
             </div>
             <div className="row-gap row-gap_20">
               <form
-                className="row-gap row-gap_20 settings-form"
+                role="form"
                 onSubmit={handleSubmit}
+                className="row-gap row-gap_20 settings-form"
               >
-                <label htmlFor="password">Old Password</label>
+                <label htmlFor="old_password">Old Password</label>
                 <input
                   className="settings-form-input"
-                  id="password"
+                  id="old_password"
                   type="password"
                   value={password.old_password}
                   required
@@ -132,6 +130,7 @@ const Setting = () => {
                   <input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                     required
                     value={password.password}
                     placeholder="Password"
@@ -142,6 +141,7 @@ const Setting = () => {
                   <span
                     className="show-password-icon"
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label="toggle eye visibility"
                   >
                     {showPassword ? <Eye /> : <EyeSlash />}
                   </span>
@@ -152,7 +152,9 @@ const Setting = () => {
                 </div>
 
                 <div className="relative input settings-form-input">
-                  <label htmlFor="password">Confirm Password</label>
+                  <label htmlFor="password_confirmation">
+                    Confirm Password
+                  </label>
                   <input
                     id="password_confirmation"
                     type={showConfirmPassword ? 'text' : 'password'}

@@ -16,7 +16,6 @@ import useFeedbackForm from '@/handlers/feedbackForm';
 interface Feedback {
   name: string;
   email: string;
-  role: number;
   rating: number;
   comments: string;
 }
@@ -27,7 +26,6 @@ const UserFeedback = () => {
   const [feedback, setFeedback] = useState<Feedback>({
     name: '',
     email: '',
-    role: 1,
     rating: 3,
     comments: '',
   });
@@ -48,9 +46,9 @@ const UserFeedback = () => {
   } = useFeedbackForm();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFeedback({ ...feedback, email: user.email });
-    console.log(feedback);
-    onSubmit(feedback, setFeedback);
+    const updatedFeedback = { ...feedback, email: user.email };
+    console.log(updatedFeedback);
+    onSubmit(updatedFeedback, setFeedback);
   };
 
   return (

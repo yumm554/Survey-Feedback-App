@@ -20,7 +20,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       feedbacks,
       pagination: {
         page,
-        limit,
         totalPages: Math.ceil(totalFeedbacks / limit),
         totalFeedbacks,
       },

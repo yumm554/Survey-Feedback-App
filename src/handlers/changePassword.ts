@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
 
 interface Password {
   old_password: string;
@@ -41,8 +40,7 @@ const useChangePassword = () => {
         password: password.password,
       });
       console.log('Password updated success', response.data);
-      toast.success('Password Successfully Updated');
-      setSuccess('Password Successfully Updated');
+      setSuccess(response.data?.message);
       setPassword({
         old_password: '',
         password: '',
@@ -53,7 +51,6 @@ const useChangePassword = () => {
         'Password update failed',
         error?.response?.data?.error?.message || error.message
       );
-      toast.error(error?.response?.data?.error?.message || 'An error occurred');
       setError(error?.response?.data?.error?.message || 'An error occurred');
     } finally {
       setLoading(false);
@@ -62,11 +59,11 @@ const useChangePassword = () => {
   };
 
   return {
-    onUpdate,
     isPasswordLoading: loading,
     isPasswordError: error,
     isPasswordSuccess: success,
     disable,
+    onUpdate,
   };
 };
 

@@ -1,20 +1,39 @@
 import axios from 'axios';
-import { NextRouter } from 'next/router';
-import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-interface CustomRouter {
-  push: (url: string) => void;
-}
+const useLogout = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
+  const [disable, setDisable] = useState<boolean>(false);
 
-const logout = async (router: CustomRouter) => {
-  try {
-    await axios.get(`/api/users/logout`);
-    toast.success('Successfully Logged Out');
-    router.push('/login');
-  } catch (error: any) {
-    console.log(error.message);
-    toast.error(error.message);
-  }
+  const onLogout = async () => {
+    try {
+      setError('');
+      setSuccess('');
+      setLoading(true);
+      setDisable(true);
+
+      await axios.get(`/api/users/logout`);
+      setSuccess('Redirecting...');
+      router.push('/login');
+    } catch (error: any) {
+      console.log(error.message);
+      setError('An error occured');
+    } finally {
+      setLoading(false);
+      setDisable(false);
+    }
+  };
+  return {
+    isLogoutLoading: loading,
+    isLogoutError: error,
+    isLogoutSuccess: success,
+    logoutDisable: disable,
+    onLogout,
+  };
 };
 
-export default logout;
+export default useLogout;

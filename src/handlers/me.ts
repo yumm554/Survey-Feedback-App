@@ -8,14 +8,16 @@ interface User {
 }
 
 const GetUserDetails = () => {
-  const [user, setUser] = useState<User>({ username: '', role: 1, email: '' });
+  const [user, setUser] = useState<User>({ username: '', role: 0, email: '' });
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const getUserDetails = async () => {
       try {
+        setError('');
+        setLoading(true);
         const response = await axios.get(`/api/users/me`);
         setUser({
           username: response.data?.user.username,
