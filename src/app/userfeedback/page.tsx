@@ -115,20 +115,21 @@ const UserFeedback = () => {
                     type="text"
                     pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                     disabled
-                    value={user.email}
+                    value={user.email || `couldn't fetch`}
                     placeholder="Email"
                     required
                   />
                 </>
               )}
 
-              <label>Rating:</label>
+              <label>Rating</label>
               <div className="align-center rating_wrapper">
                 <div
                   className={`rating-box align-center green ${
                     feedback.rating === 5 ? 'active' : ''
                   }`}
                   onClick={() => handleRatingClick(5)}
+                  aria-label="rating no"
                 >
                   <RatingStar />
                   <span className="black-regular text-12x1">5</span>
@@ -139,6 +140,7 @@ const UserFeedback = () => {
                     feedback.rating === 4 ? 'active' : ''
                   }`}
                   onClick={() => handleRatingClick(4)}
+                  aria-label="rating no"
                 >
                   <RatingStar />
                   <span className="black-regular text-12x1">4</span>
@@ -149,6 +151,7 @@ const UserFeedback = () => {
                     feedback.rating === 3 ? 'active' : ''
                   }`}
                   onClick={() => handleRatingClick(3)}
+                  aria-label="rating no"
                 >
                   <RatingStar />
                   <span className="black-regular text-12x1">3</span>
@@ -159,6 +162,7 @@ const UserFeedback = () => {
                     feedback.rating === 2 ? 'active' : ''
                   }`}
                   onClick={() => handleRatingClick(2)}
+                  aria-label="rating no"
                 >
                   <RatingStar />
                   <span className="black-regular text-12x1">2</span>
@@ -169,6 +173,7 @@ const UserFeedback = () => {
                     feedback.rating === 1 ? 'active' : ''
                   }`}
                   onClick={() => handleRatingClick(1)}
+                  aria-label="rating no"
                 >
                   <RatingStar />
                   <span className="black-regular text-12x1">1</span>

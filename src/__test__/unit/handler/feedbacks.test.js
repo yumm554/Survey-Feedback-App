@@ -1,6 +1,6 @@
 import { renderHook, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
-import useFetchFeedbacks from '../../handlers/feedbacks';
+import useFetchFeedbacks from 'src/handlers/feedbacks';
 import MockAdapter from 'axios-mock-adapter';
 
 const mock = new MockAdapter(axios);
@@ -18,13 +18,13 @@ describe('Feedback Form Hook', () => {
       feedbacks: [
         {
           _id: '1',
-          username: 'user1',
+          name: 'Test User 1',
           email: 'user1@example.com',
           rating: 5,
         },
         {
-          _id: '2',
-          username: 'user2',
+          _id: 'Test User 2',
+          name: 'user2',
           email: 'user2@example.com',
           rating: 4,
         },

@@ -85,22 +85,37 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
                 {isLoading ? (
                   <ul className="nav_list_items row-gap_10">
                     <li>
-                      <p className="text-loader"></p>
+                      <div
+                        className="text-loader"
+                        aria-label="sidebar item loader"
+                      ></div>
                     </li>
                     <li>
-                      <p className="text-loader"></p>
+                      <div
+                        className="text-loader"
+                        aria-label="sidebar item loader"
+                      ></div>
                     </li>
                     <li>
-                      <p className="text-loader"></p>
+                      <div
+                        className="text-loader"
+                        aria-label="sidebar item loader"
+                      ></div>
                     </li>
                     <li>
-                      <p className="text-loader"></p>
+                      <div
+                        className="text-loader"
+                        aria-label="sidebar item loader"
+                      ></div>
                     </li>
                     {active === 'settings' ? (
                       <>
                         <div className="hr"></div>
                         <li>
-                          <p className="text-loader"></p>
+                          <div
+                            className="text-loader"
+                            aria-label="sidebar item loader"
+                          ></div>
                         </li>
                       </>
                     ) : (
@@ -260,22 +275,37 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
               {isLoading ? (
                 <ul className="nav_list_items row-gap_10">
                   <li>
-                    <p className="text-loader"></p>
+                    <div
+                      className="text-loader"
+                      aria-label="sidebar item loader"
+                    ></div>
                   </li>
                   <li>
-                    <p className="text-loader"></p>
+                    <div
+                      className="text-loader"
+                      aria-label="sidebar item loader"
+                    ></div>
                   </li>
                   <li>
-                    <p className="text-loader"></p>
+                    <div
+                      className="text-loader"
+                      aria-label="sidebar item loader"
+                    ></div>
                   </li>
                   <li>
-                    <p className="text-loader"></p>
+                    <div
+                      className="text-loader"
+                      aria-label="sidebar item loader"
+                    ></div>
                   </li>
                   {active === 'settings' ? (
                     <>
                       <div className="hr"></div>
                       <li>
-                        <p className="text-loader"></p>
+                        <div
+                          className="text-loader"
+                          aria-label="sidebar item loader"
+                        ></div>
                       </li>
                     </>
                   ) : (

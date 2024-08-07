@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import axios from 'axios';
-import GetUserDetails from '../../handlers/me';
+import GetUserDetails from 'src/handlers/me';
 import MockAdapter from 'axios-mock-adapter';
 
 const mock = new MockAdapter(axios);

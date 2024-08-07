@@ -1,20 +1,20 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import FeedbackList from '../app/feedbacklist/page';
-import GetUserDetails from '../handlers/me';
-import useFetchFeedbacks from '../handlers/feedbacks';
+import FeedbackList from 'src/app/feedbacklist/page';
+import GetUserDetails from 'src/handlers/me';
+import useFetchFeedbacks from 'src/handlers/feedbacks';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
 // Mock the handlers
-jest.mock('../handlers/me', () => ({
+jest.mock('src/handlers/me', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
-jest.mock('../handlers/feedbacks', () => ({
+jest.mock('src/handlers/feedbacks', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
@@ -26,7 +26,7 @@ describe('Feedback List Component', () => {
     }));
 
     GetUserDetails.mockReturnValue({
-      user: { username: 'testuser', email: 'test@example.com', role: 0 },
+      user: { username: 'testuser', email: 'test@example.com', role: 1 },
       isAdmin: false,
       isLoading: false,
     });
@@ -35,13 +35,13 @@ describe('Feedback List Component', () => {
       feedbacks: [
         {
           _id: '1',
-          username: 'user1',
+          name: 'Test User 1',
           email: 'user1@example.com',
           rating: 5,
         },
         {
           _id: '2',
-          username: 'user2',
+          name: 'Test User 2',
           email: 'user2@example.com',
           rating: 4,
         },
@@ -56,19 +56,17 @@ describe('Feedback List Component', () => {
     jest.clearAllMocks();
   });
 
-  it('renders user information correctly', async () => {
+  it('renders feedback list correctly', async () => {
     render(<FeedbackList />);
 
-    // Check for feedback submissions
-    await waitFor(() => {
-      expect(screen.getByText('user1')).toBeInTheDocument();
-      expect(screen.getByText('user1@example.com')).toBeInTheDocument();
-      expect(screen.getByText('5')).toBeInTheDocument();
+    // Check if feedbacks are listed
+    expect(screen.getByText('Test User 1')).toBeInTheDocument();
+    expect(screen.getByText('user1@example.com')).toBeInTheDocument();
+    expect(screen.getByText('5')).toBeInTheDocument();
 
-      expect(screen.getByText('user2')).toBeInTheDocument();
-      expect(screen.getByText('user2@example.com')).toBeInTheDocument();
-      expect(screen.getByText('4')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Test User 2')).toBeInTheDocument();
+    expect(screen.getByText('user2@example.com')).toBeInTheDocument();
+    expect(screen.getByText('4')).toBeInTheDocument();
 
     // Check pagination
     expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
@@ -80,11 +78,11 @@ describe('Feedback List Component', () => {
     const nextButton = screen.getByLabelText('next button');
     const prevButton = screen.getByLabelText('prev button');
 
-    // Simulate next page click
+    //next page click
     fireEvent.click(nextButton);
     await expect(useFetchFeedbacks).toHaveBeenCalledWith(2, 10);
 
-    // Simulate previous page click
+    //previous page click
     fireEvent.click(prevButton);
     await expect(useFetchFeedbacks).toHaveBeenCalledWith(1, 10);
   });
@@ -116,7 +114,7 @@ describe('Feedback List Component', () => {
     expect(prevButton).toHaveClass('disabled');
   });
 
-  it('shows loading state while submitting', () => {
+  it('shows loading state while fetching feedbacks', () => {
     useFetchFeedbacks.mockReturnValue({
       feedbacks: [],
       pagination: {},
@@ -125,7 +123,7 @@ describe('Feedback List Component', () => {
     });
 
     render(<FeedbackList />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText('loading...')).toBeInTheDocument();
 
     const nextButton = screen.getByLabelText('next button');
     const prevButton = screen.getByLabelText('prev button');

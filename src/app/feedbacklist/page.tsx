@@ -94,12 +94,12 @@ const FeedbackList: React.FC = () => {
                 </tr>
               ) : isFeedbackLoading ? (
                 <tr className="no-background">
-                  <td>Loading...</td>
+                  <td>loading...</td>
                 </tr>
               ) : (
                 feedbacks.map((feedback) => (
                   <tr key={feedback._id}>
-                    <td className="collapsed-cell">{feedback.username}</td>
+                    <td className="collapsed-cell">{feedback.name}</td>
                     <td className="collapsed-cell">{feedback.email}</td>
                     <td className="rating-cell align-right">
                       <div className="rating-box-light light-green">

@@ -70,11 +70,11 @@ const Setting = () => {
             </div>
             <div className="align-center col__flex mob__col-left mob__col-gap">
               <div className="row-gap row-gap_10 flex__1">
-                <span className="grey-medium text-09x1">Name</span>
+                <span className="grey-medium text-09x1">Username</span>
                 {isLoading ? (
                   <div className="text-loader"></div>
                 ) : (
-                  <p aria-label="username">{user.username}</p>
+                  <p>{user.username || `couldn't fetch`}</p>
                 )}
               </div>
 
@@ -83,7 +83,7 @@ const Setting = () => {
                 {isLoading ? (
                   <div className="text-loader"></div>
                 ) : (
-                  <p className="ellipses">{user.email}</p>
+                  <p className="ellipses">{user.email || `couldn't fetch`}</p>
                 )}
               </div>
 
@@ -94,7 +94,7 @@ const Setting = () => {
                 {isLoading ? (
                   <div className="text-loader align-right"></div>
                 ) : (
-                  <p className="align-right mob-no-right" aria-label="role">
+                  <p className="align-right mob-no-right">
                     {user.role === 0 ? 'User' : 'Admin'}
                   </p>
                 )}
@@ -141,7 +141,7 @@ const Setting = () => {
                   <span
                     className="show-password-icon"
                     onClick={() => setShowPassword(!showPassword)}
-                    aria-label="toggle eye visibility"
+                    aria-label="toggle eye visibility for password"
                   >
                     {showPassword ? <Eye /> : <EyeSlash />}
                   </span>
@@ -171,6 +171,7 @@ const Setting = () => {
                   <span
                     className="show-password-icon"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    aria-label="toggle eye visibility for confirm password"
                   >
                     {showConfirmPassword ? <Eye /> : <EyeSlash />}
                   </span>

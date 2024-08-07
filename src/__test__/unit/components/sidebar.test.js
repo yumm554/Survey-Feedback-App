@@ -1,19 +1,19 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '../../components/Sidebar';
-import useDeleteAccount from '../../handlers/deleteAccount';
-import useLogout from '../../handlers/logout';
+import Sidebar from 'src/components/Sidebar';
+import useDeleteAccount from 'src/handlers/deleteAccount';
+import useLogout from 'src/handlers/logout';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock('../../handlers/deleteAccount', () => ({
+jest.mock('src/handlers/deleteAccount', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
-jest.mock('../../handlers/logout', () => ({
+jest.mock('src/handlers/logout', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
@@ -53,7 +53,7 @@ describe('Sidebar Component', () => {
       isLoading: false,
       active: 'settings',
       sidebar: true, //must toggle it when toggle mobNav
-      isAdmin: true, //toggle it to test for the user and admin
+      isAdmin: true,
     },
   };
 
@@ -128,19 +128,18 @@ describe('Sidebar Component', () => {
     const submitButton = screen.getByText('Delete Account');
 
     fireEvent.click(submitButton);
+
+    const reallySubmitButton = screen.getByText('Really Delete?');
+    expect(reallySubmitButton).toBeInTheDocument();
+    expect(reallySubmitButton).toHaveClass('disabled');
     const cancelButton = screen.getByText('Cancel');
-    expect(screen.getByText('Really Delete?')).toBeInTheDocument();
-
-    //expect button to be disables
-    expect(screen.getByText('Really Delete?')).toHaveClass('disabled');
-
     expect(cancelButton).toBeInTheDocument();
 
     fireEvent.click(cancelButton);
     expect(screen.getByText('Delete Account')).toBeInTheDocument();
   });
 
-  it('shows loading state while submitting', () => {
+  it('shows loading state while deleting account', () => {
     useDeleteAccount.mockReturnValue({
       isDeleteLoading: true,
       isDeleteError: '',
@@ -153,7 +152,7 @@ describe('Sidebar Component', () => {
     expect(screen.getByText('deleting...')).toBeInTheDocument();
   });
 
-  it('shows error message when there is an error', () => {
+  it('shows error message when there is an error in deleting', () => {
     useDeleteAccount.mockReturnValue({
       isDeleteLoading: false,
       isDeleteError: 'An error occurred',
@@ -166,7 +165,7 @@ describe('Sidebar Component', () => {
     expect(screen.getByText('An error occurred')).toBeInTheDocument();
   });
 
-  it('shows success message when feedback is successfully submitted', () => {
+  it('shows success message when account is deleted successfully', () => {
     useDeleteAccount.mockReturnValue({
       isDeleteLoading: false,
       isDeleteError: '',
@@ -177,5 +176,60 @@ describe('Sidebar Component', () => {
 
     render(<Sidebar {...defaultProps} />);
     expect(screen.getByText('User deleted successfully')).toBeInTheDocument();
+  });
+
+  it('handles visibility when active is list', () => {
+    const defaultPropsActive = {
+      data: {
+        ...defaultProps.data,
+        active: 'list',
+      },
+    };
+    render(<Sidebar {...defaultPropsActive} />);
+
+    expect(
+      screen.getByText('Feedback Submissions').parentElement.parentElement
+    ).toHaveClass('highlight-background');
+    expect(screen.queryByText('Delete Account')).not.toBeInTheDocument();
+  });
+
+  it('handles visibility when isAdmin is false', () => {
+    const defaultPropsIsAdmin = {
+      data: {
+        ...defaultProps.data,
+        isAdmin: false,
+      },
+    };
+    render(<Sidebar {...defaultPropsIsAdmin} />);
+
+    expect(screen.queryByText('Feedback Submissions')).not.toBeInTheDocument();
+    expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
+    expect(screen.queryByText('Reports')).not.toBeInTheDocument();
+  });
+
+  it('handles visibility when mobNav is true', () => {
+    const defaultPropsMobNav = {
+      data: {
+        ...defaultProps.data,
+        mobNav: true,
+      },
+    };
+    render(<Sidebar {...defaultPropsMobNav} />);
+
+    expect(screen.getByText('Open the survey')).toBeInTheDocument();
+  });
+
+  it('handles visibility when loading is true', () => {
+    const defaultPropsLoading = {
+      data: {
+        ...defaultProps.data,
+        isLoading: true,
+      },
+    };
+    render(<Sidebar {...defaultPropsLoading} />);
+
+    expect(
+      screen.getAllByLabelText('sidebar item loader').length
+    ).toBeGreaterThan(0);
   });
 });

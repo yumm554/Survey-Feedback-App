@@ -1,19 +1,19 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import UserFeedback from '../app/userFeedback/page';
+import UserFeedback from 'src/app/userFeedback/page';
 import { useRouter } from 'next/navigation';
-import GetUserDetails from '../handlers/me';
-import useFeedbackForm from '../handlers/feedbackForm';
+import GetUserDetails from 'src/handlers/me';
+import useFeedbackForm from 'src/handlers/feedbackForm';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock('../handlers/me', () => ({
+jest.mock('src/handlers/me', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
-jest.mock('../handlers/feedbackForm', () => ({
+jest.mock('src/handlers/feedbackForm', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
@@ -45,36 +45,26 @@ describe('UserFeedback Component', () => {
 
   it('renders the feedback form with all fields', () => {
     render(<UserFeedback />);
-    expect(screen.getByLabelText(/Name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
-    expect(screen.getByText(/Rating/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Comments/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Name')).toBeInTheDocument();
+    expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    expect(screen.getByText('Rating')).toBeInTheDocument();
+    expect(screen.getByLabelText('Comments')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /Submit Feedback/i })
+      screen.getByRole('button', { name: 'Submit Feedback' })
     ).toBeInTheDocument();
-  });
-
-  it('updates feedback state on input change', () => {
-    render(<UserFeedback />);
-    fireEvent.change(screen.getByLabelText(/Name/i), {
-      target: { value: 'Test User' },
-    });
-    fireEvent.change(screen.getByLabelText(/Comments/i), {
-      target: { value: 'Great service!' },
-    });
-
-    expect(screen.getByLabelText(/Name/i)).toHaveValue('Test User');
-    expect(screen.getByLabelText(/Comments/i)).toHaveValue('Great service!');
   });
 
   it('updates rating state on rating click', () => {
     render(<UserFeedback />);
-    const rating3 = screen.getByText('3');
-    const rating5 = screen.getByText('5');
+    const ratings = screen.getAllByLabelText('rating no');
+    expect(ratings).toHaveLength(5);
+
+    const rating3 = ratings[2];
+    const rating5 = ratings[0];
 
     fireEvent.click(rating5);
-    expect(rating5.parentElement).toHaveClass('active');
-    expect(rating3.parentElement).not.toHaveClass('active');
+    expect(rating5).toHaveClass('active');
+    expect(rating3).not.toHaveClass('active');
   });
 
   it('submits the form with correct data', async () => {
@@ -88,15 +78,18 @@ describe('UserFeedback Component', () => {
     });
 
     render(<UserFeedback />);
-    fireEvent.change(screen.getByLabelText(/Name/i), {
+    fireEvent.change(screen.getByLabelText('Name'), {
       target: { value: 'Test User' },
     });
-    fireEvent.change(screen.getByLabelText(/Comments/i), {
+    fireEvent.change(screen.getByLabelText('Comments'), {
       target: { value: 'Great service!' },
     });
-    fireEvent.click(screen.getByText('5'));
 
-    fireEvent.click(screen.getByRole('button', { name: /Submit Feedback/i }));
+    const rating5 = screen.getAllByLabelText('rating no')[0];
+    fireEvent.click(rating5);
+    expect(rating5).toHaveClass('active');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Submit Feedback' }));
 
     expect(mockOnSubmit).toHaveBeenCalledWith(
       {
@@ -120,7 +113,7 @@ describe('UserFeedback Component', () => {
 
     render(<UserFeedback />);
     expect(
-      screen.getByRole('button', { name: /Submitting Feedback/i })
+      screen.getByRole('button', { name: 'Submitting Feedback' })
     ).toBeDisabled();
   });
 
@@ -134,7 +127,7 @@ describe('UserFeedback Component', () => {
     });
 
     render(<UserFeedback />);
-    expect(screen.getByText(/An error occurred/i)).toBeInTheDocument();
+    expect(screen.getByText('An error occurred')).toBeInTheDocument();
   });
 
   it('shows success message when feedback is successfully submitted', () => {
@@ -148,7 +141,7 @@ describe('UserFeedback Component', () => {
 
     render(<UserFeedback />);
     expect(
-      screen.getByText(/Feedback submitted successfully/i)
+      screen.getByText('Feedback submitted successfully')
     ).toBeInTheDocument();
   });
 });

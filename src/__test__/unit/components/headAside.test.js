@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import HeadAside from '../../components/HeadAside';
+import HeadAside from 'src/components/HeadAside';
 
 describe('Head Aside Component', () => {
   const defaultProps = {

@@ -1,6 +1,6 @@
 import { renderHook, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
-import useLogin from '../../handlers/login';
+import useLogin from 'src/handlers/login';
 import MockAdapter from 'axios-mock-adapter';
 import { useRouter } from 'next/navigation';
 
@@ -22,7 +22,7 @@ describe('Login Hook', () => {
     mock.reset();
   });
 
-  it('should fetch user details', async () => {
+  it('should login successfully', async () => {
     const userData = {
       message: 'Login successful',
       role: 1,
@@ -50,7 +50,7 @@ describe('Login Hook', () => {
     expect(mockPush).toHaveBeenCalledWith('/feedbacklist');
   });
 
-  it('error fetching data', async () => {
+  it('error logging in', async () => {
     const userData = {
       error: { message: 'User doesnt exist', type: 1 },
     };

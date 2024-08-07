@@ -1,13 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import SignUp from '../app/signup/page';
-import useSignup from '../handlers/signup';
+import SignUp from 'src/app/signup/page';
+import useSignup from 'src/handlers/signup';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock('../handlers/signup', () => ({
+jest.mock('src/handlers/signup', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
@@ -31,12 +31,18 @@ describe('Signup Component', () => {
     jest.clearAllMocks();
   });
 
-  it('renders the login form', () => {
+  it('renders the Signup form', () => {
     render(<SignUp />);
     expect(screen.getByLabelText('Username')).toBeInTheDocument();
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: 'User' }));
-    expect(screen.getByRole('checkbox', { name: 'Admin' }));
+    const userCheckbox = screen.getByRole('checkbox', { name: 'User' });
+    expect(userCheckbox).toBeInTheDocument();
+    expect(userCheckbox).toBeChecked();
+
+    const adminCheckbox = screen.getByRole('checkbox', { name: 'Admin' });
+    expect(adminCheckbox).toBeInTheDocument();
+    expect(adminCheckbox).not.toBeChecked();
+
     expect(screen.getByLabelText('Password')).toBeInTheDocument();
     expect(screen.getByLabelText('Confirm Password')).toBeInTheDocument();
 
@@ -46,7 +52,23 @@ describe('Signup Component', () => {
   it('toggles the password visibility', () => {
     render(<SignUp />);
     const passwordInput = screen.getByLabelText('Password');
-    const toggleButton = screen.getByLabelText('toggle eye visibility');
+    const toggleButton = screen.getByLabelText(
+      'toggle eye visibility for password'
+    );
+
+    expect(passwordInput).toHaveAttribute('type', 'password');
+    fireEvent.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'text');
+    fireEvent.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'password');
+  });
+
+  it('toggles the confirm password visibility', () => {
+    render(<SignUp />);
+    const passwordInput = screen.getByLabelText('Confirm Password');
+    const toggleButton = screen.getByLabelText(
+      'toggle eye visibility for confirm password'
+    );
 
     expect(passwordInput).toHaveAttribute('type', 'password');
     fireEvent.click(toggleButton);
@@ -72,7 +94,7 @@ describe('Signup Component', () => {
     expect(adminCheckbox).not.toBeChecked();
   });
 
-  it('submits the form', () => {
+  it('submits the form when role is user', () => {
     const mockOnSignUp = jest.fn();
     useSignup.mockReturnValue({
       isSignupLoading: false,
@@ -106,6 +128,55 @@ describe('Signup Component', () => {
         email: 'test@example.com',
         role: 0,
         key: '',
+        password: 'Password123',
+        password_confirmation: 'Password123',
+      },
+      expect.any(Function)
+    );
+  });
+
+  it('submits the form when role is admin', () => {
+    const mockOnSignUp = jest.fn();
+    useSignup.mockReturnValue({
+      isSignupLoading: false,
+      isSignupError: '',
+      isSignupSuccess: '',
+      onSignUp: mockOnSignUp,
+      disable: false,
+    });
+
+    render(<SignUp />);
+    const usernameInput = screen.getByLabelText('Username');
+    const emailInput = screen.getByLabelText('Email');
+    const userCheckbox = screen.getByRole('checkbox', { name: 'User' });
+    const adminCheckbox = screen.getByRole('checkbox', { name: 'Admin' });
+    const passwordInput = screen.getByLabelText('Password');
+    const confirmPasswordInput = screen.getByLabelText('Confirm Password');
+    const submitButton = screen.getByRole('button', { name: 'Sign Up' });
+
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.click(adminCheckbox);
+    expect(adminCheckbox).toBeChecked();
+    expect(userCheckbox).not.toBeChecked();
+
+    const keyInput = screen.getByLabelText('Key');
+    expect(keyInput).toBeInTheDocument();
+    fireEvent.change(keyInput, { target: { value: 'AAAAAAAAA' } });
+
+    fireEvent.change(passwordInput, { target: { value: 'Password123' } });
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'Password123' },
+    });
+
+    fireEvent.click(submitButton);
+
+    expect(mockOnSignUp).toHaveBeenCalledWith(
+      {
+        username: 'testuser',
+        email: 'test@example.com',
+        role: 1,
+        key: 'AAAAAAAAA',
         password: 'Password123',
         password_confirmation: 'Password123',
       },

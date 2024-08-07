@@ -81,7 +81,7 @@ const Login = () => {
                 <span
                   className="show-password-icon"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label="toggle eye visibility"
+                  aria-label="toggle eye visibility for password"
                 >
                   {showPassword ? <Eye /> : <EyeSlash />}
                 </span>

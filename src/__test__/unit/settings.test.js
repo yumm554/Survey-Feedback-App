@@ -1,20 +1,20 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import Setting from '../app/settings/page';
-import GetUserDetails from '../handlers/me';
-import useChangePassword from '../handlers/changePassword';
+import Setting from 'src/app/settings/page';
+import GetUserDetails from 'src/handlers/me';
+import useChangePassword from 'src/handlers/changePassword';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
 // Mock the handlers
-jest.mock('../handlers/me', () => ({
+jest.mock('src/handlers/me', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
-jest.mock('../handlers/changePassword', () => ({
+jest.mock('src/handlers/changePassword', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
@@ -47,9 +47,15 @@ describe('Setting Component', () => {
   it('renders user information correctly', () => {
     render(<Setting />);
 
-    expect(screen.getByLabelText('username')).toBeInTheDocument();
+    const username = screen.getByText('Username').nextSibling;
+    expect(username).toBeInTheDocument();
+    expect(username.textContent).toBe('testuser');
+
     expect(screen.getByText('test@example.com')).toBeInTheDocument();
-    expect(screen.getByLabelText('role')).toBeInTheDocument();
+
+    const role = screen.getByText('Role').nextSibling;
+    expect(role).toBeInTheDocument();
+    expect(role.textContent).toBe('User');
   });
 
   it('renders the feedback form with all fields', () => {
@@ -65,7 +71,23 @@ describe('Setting Component', () => {
   it('toggles the password visibility', () => {
     render(<Setting />);
     const passwordInput = screen.getByLabelText('Password');
-    const toggleButton = screen.getByLabelText('toggle eye visibility');
+    const toggleButton = screen.getByLabelText(
+      'toggle eye visibility for password'
+    );
+
+    expect(passwordInput).toHaveAttribute('type', 'password');
+    fireEvent.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'text');
+    fireEvent.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'password');
+  });
+
+  it('toggles the confirm password visibility', () => {
+    render(<Setting />);
+    const passwordInput = screen.getByLabelText('Confirm Password');
+    const toggleButton = screen.getByLabelText(
+      'toggle eye visibility for confirm password'
+    );
 
     expect(passwordInput).toHaveAttribute('type', 'password');
     fireEvent.click(toggleButton);
@@ -103,7 +125,6 @@ describe('Setting Component', () => {
       target: { value: 'newPassword123' },
     });
 
-    // Trigger the form submission
     fireEvent.click(submitButton);
 
     expect(mockOnUpdate).toHaveBeenCalledWith(

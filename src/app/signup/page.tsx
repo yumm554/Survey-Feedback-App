@@ -166,7 +166,7 @@ const SignUp = () => {
                 <span
                   className="show-password-icon"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label="toggle eye visibility"
+                  aria-label="toggle eye visibility for password"
                 >
                   {showPassword ? <Eye /> : <EyeSlash />}
                 </span>
@@ -191,6 +191,7 @@ const SignUp = () => {
                 <span
                   className="show-password-icon"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label="toggle eye visibility for confirm password"
                 >
                   {showConfirmPassword ? <Eye /> : <EyeSlash />}
                 </span>

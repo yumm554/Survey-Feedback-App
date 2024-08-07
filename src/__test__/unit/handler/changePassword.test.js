@@ -1,11 +1,11 @@
 import { renderHook, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
-import useChangePassword from '../../handlers/changePassword';
+import useChangePassword from 'src/handlers/changePassword';
 import MockAdapter from 'axios-mock-adapter';
 
 const mock = new MockAdapter(axios);
 
-describe('Signup Hook', () => {
+describe('Change Password Hook', () => {
   const setPassword = jest.fn();
   const password = {
     old_password: 'oldPassword123',

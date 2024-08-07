@@ -4,7 +4,6 @@ import { Hamburger, NavArrow, Settings } from '@/assets/icons/getIcon';
 import { User } from '../assets/icons/getIcon';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 const Header = ({ data }: any) => {
   const { user, mobNav, setMobNav, isLoading, sidebar } = data;
@@ -57,12 +56,18 @@ const Header = ({ data }: any) => {
             </div>
             <div className="loader-used">
               {isLoading ? (
-                <div className="text-loader" aria-label="header loader"></div>
+                <div
+                  className="text-loader"
+                  aria-label="header item loader"
+                ></div>
               ) : (
-                <p>{user.username || 'Username'}</p>
+                <p>{user.username || `couldn't fetch`}</p>
               )}
               {isLoading ? (
-                <div className="text-loader" aria-label="header loader"></div>
+                <div
+                  className="text-loader"
+                  aria-label="header item loader"
+                ></div>
               ) : (
                 <span className="grey-medium text-09x1">
                   {user.role === 0 ? 'User' : 'Admin'}

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import Header from '../../components/Header';
+import Header from 'src/components/Header';
 
 describe('Header Component', () => {
   const defaultProps = {
@@ -22,7 +22,7 @@ describe('Header Component', () => {
   it('toggles mobile navigation', () => {
     render(<Header {...defaultProps} />);
 
-    // Simulate clicking the hamburger icon
+    //clicking the hamburger icon
     fireEvent.click(screen.getByLabelText('mob nav toggle'));
     expect(defaultProps.data.setMobNav).toHaveBeenCalledWith(true);
   });
@@ -33,10 +33,8 @@ describe('Header Component', () => {
     };
     render(<Header {...defaultPropsWithoutSidebar} />);
 
-    // Check if the settings link is rendered
     expect(screen.getByText('Settings')).toBeInTheDocument();
 
-    //PS logo
     const logo = screen.getByAltText('PS logo');
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute('src', expect.stringMatching('PS-logo.png'));
@@ -48,7 +46,6 @@ describe('Header Component', () => {
     };
     render(<Header {...defaultPropsWithLoading} />);
 
-    // Check if the loaders are displayed
-    expect(screen.getAllByLabelText('header loader').length).toBe(2);
+    expect(screen.getAllByLabelText('header item loader').length).toBe(2);
   });
 });

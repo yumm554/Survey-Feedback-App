@@ -10,7 +10,7 @@ interface User {
 const GetUserDetails = () => {
   const [user, setUser] = useState<User>({ username: '', role: 0, email: '' });
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {

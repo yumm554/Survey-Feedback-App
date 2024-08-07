@@ -1,6 +1,6 @@
 import { renderHook, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
-import useLogout from '../../handlers/logout';
+import useDeleteAccount from 'src/handlers/deleteAccount';
 import MockAdapter from 'axios-mock-adapter';
 import { useRouter } from 'next/navigation';
 
@@ -9,8 +9,9 @@ jest.mock('next/navigation', () => ({
 }));
 const mock = new MockAdapter(axios);
 
-describe('Login Hook', () => {
+describe('Delete Hook', () => {
   const mockPush = jest.fn();
+  const email = 'test@example.com';
 
   beforeEach(() => {
     useRouter.mockImplementation(() => ({
@@ -23,52 +24,52 @@ describe('Login Hook', () => {
 
   it('should fetch user details', async () => {
     const userData = {
-      message: 'logout successfully',
+      message: 'User deleted successfully',
     };
 
-    mock.onGet('/api/users/logout').reply(200, userData);
-    const { result } = renderHook(() => useLogout());
+    mock.onDelete('/api/users/deleteaccount').reply(200, userData);
+    const { result } = renderHook(() => useDeleteAccount());
     act(() => {
-      result.current.onLogout();
+      result.current.onDelete(email);
     });
 
     expect(result.current).toMatchObject({
-      isLogoutLoading: true,
-      logoutDisable: true,
+      isDeleteLoading: true,
+      disable: true,
     });
 
     await waitFor(() =>
       expect(result.current).toMatchObject({
-        isLogoutLoading: false,
-        logoutDisable: false,
-        isLogoutSuccess: 'Redirecting...',
+        isDeleteLoading: false,
+        disable: false,
+        isDeleteSuccess: 'User deleted successfully',
       })
     );
 
-    expect(mockPush).toHaveBeenCalledWith('/login');
+    expect(mockPush).toHaveBeenCalledWith('/signup');
   });
 
   it('error fetching data', async () => {
     const userData = {
-      error: 'An error occured',
+      error: 'An error occurred',
     };
 
-    mock.onPost('/api/users/logout').reply(500, userData);
-    const { result } = renderHook(() => useLogout());
+    mock.onDelete('/api/users/deleteaccount').reply(500, userData);
+    const { result } = renderHook(() => useDeleteAccount());
     act(() => {
-      result.current.onLogout();
+      result.current.onDelete(email);
     });
 
     expect(result.current).toMatchObject({
-      isLogoutLoading: true,
-      logoutDisable: true,
+      isDeleteLoading: true,
+      disable: true,
     });
 
     await waitFor(() =>
       expect(result.current).toMatchObject({
-        isLogoutLoading: false,
-        logoutDisable: false,
-        isLogoutError: 'An error occured',
+        isDeleteLoading: false,
+        disable: false,
+        isDeleteError: 'An error occurred',
       })
     );
   });

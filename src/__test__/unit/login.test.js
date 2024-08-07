@@ -1,13 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import Login from '../app/login/page';
-import useLogin from '../handlers/login';
+import Login from 'src/app/login/page';
+import useLogin from 'src/handlers/login';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock('../handlers/login', () => ({
+jest.mock('src/handlers/login', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
@@ -33,15 +33,17 @@ describe('Login Component', () => {
 
   it('renders the login form', () => {
     render(<Login />);
-    expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Log In/i }));
+    expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    expect(screen.getByLabelText('Password')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Log In' }));
   });
 
   it('toggles the password visibility', () => {
     render(<Login />);
-    const passwordInput = screen.getByLabelText(/Password/i);
-    const toggleButton = screen.getByLabelText('toggle eye visibility');
+    const passwordInput = screen.getByLabelText('Password');
+    const toggleButton = screen.getByLabelText(
+      'toggle eye visibility for password'
+    );
 
     expect(passwordInput).toHaveAttribute('type', 'password');
     fireEvent.click(toggleButton);
@@ -61,9 +63,9 @@ describe('Login Component', () => {
     });
 
     render(<Login />);
-    const emailInput = screen.getByLabelText(/Email/i);
-    const passwordInput = screen.getByLabelText(/Password/i);
-    const submitButton = screen.getByRole('button', { name: /Log In/i });
+    const emailInput = screen.getByLabelText('Email');
+    const passwordInput = screen.getByLabelText('Password');
+    const submitButton = screen.getByRole('button', { name: 'Log In' });
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { value: 'password' } });
@@ -85,7 +87,7 @@ describe('Login Component', () => {
     });
 
     render(<Login />);
-    const submitButton = screen.getByRole('button', { name: /Logging In/i });
+    const submitButton = screen.getByRole('button', { name: 'Logging In' });
     expect(submitButton).toBeDisabled();
   });
 
@@ -99,7 +101,7 @@ describe('Login Component', () => {
     });
 
     render(<Login />);
-    const errorMessage = screen.getByText(/An error occurred/i);
+    const errorMessage = screen.getByText('An error occurred');
     expect(errorMessage).toBeInTheDocument();
   });
 
@@ -113,7 +115,7 @@ describe('Login Component', () => {
     });
 
     render(<Login />);
-    const successMessage = screen.getByText(/Redirecting.../i);
+    const successMessage = screen.getByText('Redirecting...');
     expect(successMessage).toBeInTheDocument();
   });
 });

@@ -1,6 +1,6 @@
 import { renderHook, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
-import useFeedbackForm from '../../handlers/feedbackForm';
+import useFeedbackForm from 'src/handlers/feedbackForm';
 import MockAdapter from 'axios-mock-adapter';
 
 const mock = new MockAdapter(axios);

@@ -3,10 +3,9 @@ import axios from 'axios';
 
 interface Feedback {
   _id: string;
-  username: string;
+  name: string;
   email: string;
   rating: number;
-  comments: string;
 }
 
 interface Pagination {
