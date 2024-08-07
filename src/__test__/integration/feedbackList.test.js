@@ -113,7 +113,7 @@ describe('FeedbackList Page', () => {
       expect(screen.getByText('user2@example.com')).toBeInTheDocument();
       expect(screen.getByText('4')).toBeInTheDocument();
 
-      //expect 0 feedbacks
+      //expect total feedbacks
       expect(screen.getByText('S-4')).toBeInTheDocument();
 
       expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
