@@ -21,7 +21,7 @@ describe('Login Page', () => {
     mock.reset();
   });
 
-  it('should login successfully and show success msg on screen', async () => {
+  it('handles login successfully and display success msg on screen', async () => {
     //setup mock api
     const userData = {
       message: 'Login successful',
@@ -53,7 +53,7 @@ describe('Login Page', () => {
     expect(mockPush).toHaveBeenCalledWith('/feedbacklist');
   });
 
-  it('error logging in and show error msg on screen', async () => {
+  it('handles error logging in and show error msg on screen', async () => {
     //setup mock api
     const userData = {
       error: { message: 'User doesnt exist', type: 1 },
@@ -83,7 +83,7 @@ describe('Login Page', () => {
     });
   });
 
-  it('if no error msg, static message should appear on screen', async () => {
+  it('displays a default message when no msg is provided', async () => {
     //setup mock api
     const userData = {
       error: { message: '', type: 1 },

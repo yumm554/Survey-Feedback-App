@@ -87,7 +87,7 @@ describe('Feedback List Component', () => {
     await expect(useFetchFeedbacks).toHaveBeenCalledWith(1, 10);
   });
 
-  it('handle disable on next pagination when page is equal to total pages', () => {
+  it('handles disable on next pagination when page is equal to total pages', () => {
     useFetchFeedbacks.mockReturnValue({
       feedbacks: [],
       pagination: { page: 2, totalPages: 2, totalFeedbacks: 4 },
@@ -101,7 +101,7 @@ describe('Feedback List Component', () => {
     expect(nextButton).toHaveClass('disabled');
   });
 
-  it('handle disable on prev pagination when page is 1', () => {
+  it('handles disable on prev pagination when page is 1', () => {
     useFetchFeedbacks.mockReturnValue({
       feedbacks: [],
       pagination: { page: 1, totalPages: 2, totalFeedbacks: 4 },
@@ -114,7 +114,7 @@ describe('Feedback List Component', () => {
     expect(prevButton).toHaveClass('disabled');
   });
 
-  it('shows loading state while fetching feedbacks', () => {
+  it('handles loading state while fetching feedbacks', () => {
     useFetchFeedbacks.mockReturnValue({
       feedbacks: [],
       pagination: {},
@@ -131,7 +131,7 @@ describe('Feedback List Component', () => {
     expect(prevButton).toHaveClass('disabled');
   });
 
-  it('shows error message when there is an error', () => {
+  it('handles error when fetching feedbacks', () => {
     useFetchFeedbacks.mockReturnValue({
       feedbacks: [],
       pagination: {},

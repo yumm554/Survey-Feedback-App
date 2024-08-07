@@ -22,7 +22,7 @@ describe('Login Hook', () => {
     mock.reset();
   });
 
-  it('should login successfully', async () => {
+  it('handles successful login', async () => {
     const userData = {
       message: 'Login successful',
       role: 1,
@@ -50,7 +50,7 @@ describe('Login Hook', () => {
     expect(mockPush).toHaveBeenCalledWith('/feedbacklist');
   });
 
-  it('error logging in', async () => {
+  it('handles error when logging in', async () => {
     const userData = {
       error: { message: 'User doesnt exist', type: 1 },
     };
@@ -75,7 +75,7 @@ describe('Login Hook', () => {
     );
   });
 
-  it('if no error msg, static message should appear', async () => {
+  it('displays a default error message when no message is provided', async () => {
     const userData = {
       error: { message: '' },
     };

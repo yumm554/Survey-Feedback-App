@@ -12,7 +12,7 @@ describe('Header Component', () => {
     },
   };
 
-  it('elements on screen to render must', () => {
+  it('renders elements on screen', () => {
     render(<Header {...defaultProps} />);
     expect(screen.getByText('testuser')).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();

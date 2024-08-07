@@ -30,7 +30,7 @@ describe('Signup Hook', () => {
     mock.reset();
   });
 
-  it('should fetch user details', async () => {
+  it('handles successful signup', async () => {
     const userData = {
       message: 'Successfully Signed Up',
     };
@@ -57,7 +57,7 @@ describe('Signup Hook', () => {
     expect(mockPush).toHaveBeenCalledWith('/login');
   });
 
-  it('if password does not match', async () => {
+  it('handles error when password does not match', async () => {
     const user = {
       username: 'testuser',
       email: 'test@example.com',
@@ -85,7 +85,7 @@ describe('Signup Hook', () => {
     });
   });
 
-  it('error fetching data', async () => {
+  it('handles error when signing up', async () => {
     const userData = {
       error: { message: 'User already exists', type: 2 },
     };
@@ -110,7 +110,7 @@ describe('Signup Hook', () => {
     );
   });
 
-  it('if no error msg, static message should appear', async () => {
+  it('displays a default error message when no message is provided', async () => {
     const userData = {
       error: { message: '' },
     };

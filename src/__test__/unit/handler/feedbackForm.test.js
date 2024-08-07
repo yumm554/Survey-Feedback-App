@@ -18,7 +18,7 @@ describe('Feedback Form Hook', () => {
     mock.reset();
   });
 
-  it('should submit feedback', async () => {
+  it('submits feedback successfully', async () => {
     const feedbackData = {
       message: 'Feedback submitted successfully',
     };
@@ -49,7 +49,7 @@ describe('Feedback Form Hook', () => {
     });
   });
 
-  it('error fetching data', async () => {
+  it('handles error when submitting feedback', async () => {
     const feedbackData = {
       error: 'An error occurred',
     };

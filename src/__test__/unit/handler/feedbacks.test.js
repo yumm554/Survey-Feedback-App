@@ -5,7 +5,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 const mock = new MockAdapter(axios);
 
-describe('Feedback Form Hook', () => {
+describe('Feedback List Hook', () => {
   const page = 1;
   const limit = 2;
 
@@ -13,7 +13,7 @@ describe('Feedback Form Hook', () => {
     mock.reset();
   });
 
-  it('should submit feedback', async () => {
+  it('fetch feedbacks successfully', async () => {
     const feedbackData = {
       feedbacks: [
         {
@@ -52,7 +52,7 @@ describe('Feedback Form Hook', () => {
     );
   });
 
-  it('error fetching feedbacks', async () => {
+  it('handles error when fetching feedbacks', async () => {
     const feedbackData = {
       erorr: 'An error occurred',
     };

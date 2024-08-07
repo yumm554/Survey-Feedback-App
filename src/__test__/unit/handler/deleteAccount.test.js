@@ -9,7 +9,7 @@ jest.mock('next/navigation', () => ({
 }));
 const mock = new MockAdapter(axios);
 
-describe('Delete Hook', () => {
+describe('Delete Account Hook', () => {
   const mockPush = jest.fn();
   const email = 'test@example.com';
 
@@ -22,7 +22,7 @@ describe('Delete Hook', () => {
     mock.reset();
   });
 
-  it('should fetch user details', async () => {
+  it('handles success when deleteing account', async () => {
     const userData = {
       message: 'User deleted successfully',
     };
@@ -49,7 +49,7 @@ describe('Delete Hook', () => {
     expect(mockPush).toHaveBeenCalledWith('/signup');
   });
 
-  it('error fetching data', async () => {
+  it('handles error when deleting account fails', async () => {
     const userData = {
       error: 'An error occurred',
     };

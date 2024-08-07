@@ -27,8 +27,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    //check if key is accessible from env
+    const hashedAdminKey = process.env.ADMIN_KEY;
+    if (!hashedAdminKey)
+      return NextResponse.json(
+        { error: { message: 'An error occured', type: 1 } },
+        { status: 400 }
+      );
     //check if key is correct
-    if (role === 1 && key !== 'ZF65WD490') {
+    const isKeyValid = await bcryptjs.compare(key, hashedAdminKey);
+    if (role === 1 && !isKeyValid) {
       return NextResponse.json(
         { error: { message: 'Key is not valid', type: 1 } },
         { status: 400 }

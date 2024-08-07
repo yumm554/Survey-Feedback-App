@@ -57,7 +57,7 @@ describe('Sidebar Component', () => {
     },
   };
 
-  it('logout function call correctly', () => {
+  it('calls the logout function correctly', () => {
     const mockOnLogout = jest.fn();
     useLogout.mockReturnValue({
       isLogoutLoading: false,
@@ -73,7 +73,7 @@ describe('Sidebar Component', () => {
     expect(mockOnLogout).toHaveBeenCalledWith();
   });
 
-  it('logout function loading state', () => {
+  it('handles loading state when logging in', () => {
     useLogout.mockReturnValue({
       isLogoutLoading: true,
       isLogoutError: '',
@@ -88,7 +88,7 @@ describe('Sidebar Component', () => {
     expect(submitButton).toHaveClass('disabled');
   });
 
-  it('logout function error state', () => {
+  it('handles error state when login fails', () => {
     useLogout.mockReturnValue({
       isLogoutLoading: false,
       isLogoutError: 'An error occurred',
@@ -101,7 +101,7 @@ describe('Sidebar Component', () => {
     expect(screen.getByText('An error occurred')).toBeInTheDocument();
   });
 
-  it('logout function success state', () => {
+  it('handles success state when login is successful', () => {
     useLogout.mockReturnValue({
       isLogoutLoading: false,
       isLogoutError: '',

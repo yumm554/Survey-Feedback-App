@@ -10,7 +10,7 @@ describe('Me Hook', () => {
     mock.reset();
   });
 
-  it('should fetch user details when role is 0', async () => {
+  it('handles successful me call when role is 0', async () => {
     const userData = {
       message: 'User found',
       user: {
@@ -34,7 +34,7 @@ describe('Me Hook', () => {
     );
   });
 
-  it('should fetch user details when role is 1', async () => {
+  it('handles successful me call when role is 1', async () => {
     const userData = {
       message: 'User found',
       user: {
@@ -58,7 +58,7 @@ describe('Me Hook', () => {
     );
   });
 
-  it('error fetching data', async () => {
+  it('handles error when fetching user', async () => {
     const userData = {
       error: 'Get user details failed',
     };

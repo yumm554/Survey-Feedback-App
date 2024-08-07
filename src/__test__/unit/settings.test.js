@@ -58,7 +58,7 @@ describe('Setting Component', () => {
     expect(role.textContent).toBe('User');
   });
 
-  it('renders the feedback form with all fields', () => {
+  it('renders the change password form with all fields', () => {
     render(<Setting />);
 
     expect(screen.getByLabelText('Old Password')).toBeInTheDocument();
@@ -138,7 +138,7 @@ describe('Setting Component', () => {
     );
   });
 
-  it('shows loading state while submitting', () => {
+  it('shows loading state while changing password', () => {
     useChangePassword.mockReturnValue({
       isPasswordLoading: true,
       isPasswordError: '',
@@ -164,7 +164,7 @@ describe('Setting Component', () => {
     expect(screen.getByText('An error occurred')).toBeInTheDocument();
   });
 
-  it('shows success message when feedback is successfully submitted', () => {
+  it('shows success message when changing password is successful', () => {
     useChangePassword.mockReturnValue({
       isPasswordLoading: false,
       isPasswordError: '',

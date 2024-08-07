@@ -22,7 +22,7 @@ describe('User Feedback Page', () => {
     mock.reset();
   });
 
-  it('success on me call, submit feedback and show msgs on screen', async () => {
+  it('handles successful me call, submits feedback, and displays messages on screen', async () => {
     /***************ME CALL***************/
     //setup mockup api for me call
     const userMeData = {
@@ -93,23 +93,20 @@ describe('User Feedback Page', () => {
     });
   });
 
-  it('error signing up and show error msg on screen', async () => {
-    /***************ME CALL***************/
-    //setup mockup api for me call
+  it('handles feedback submission and displays error message on screen', async () => {
+    //successful me call to check other failed api responses
     const userMeData = {
-      error: 'Get user details failed',
+      message: 'User found',
+      user: {
+        username: 'testuser',
+        role: 0,
+        email: 'testuser@example.com',
+      },
     };
-    mock.onGet('/api/users/me').reply(400, userMeData);
+    mock.onGet('/api/users/me').reply(200, userMeData);
 
     //render the component
     render(<UserFeedback />);
-
-    //check couldn't fetch returned on screen
-    await waitFor(() => {
-      //expect couldn't fetch for username and email
-      expect(screen.getByText(`couldn't fetch`)).toBeInTheDocument();
-      expect(screen.getByLabelText('Email').value).toBe(`couldn't fetch`);
-    });
 
     /***************SUBMIT FEEDBACK***************/
     //setup mock api
@@ -150,6 +147,24 @@ describe('User Feedback Page', () => {
     //check error msg on screen
     await waitFor(() => {
       expect(screen.getByText('An error occurred')).toBeInTheDocument();
+    });
+  });
+
+  it('handles error on me call and displays error message on screen', async () => {
+    //setup mockup api for me call
+    const userMeData = {
+      error: 'Get user details failed',
+    };
+    mock.onGet('/api/users/me').reply(400, userMeData);
+
+    //render the component
+    render(<UserFeedback />);
+
+    //check error msg on screen
+    await waitFor(() => {
+      expect(
+        screen.getByText('reload the page to try again')
+      ).toBeInTheDocument();
     });
   });
 });

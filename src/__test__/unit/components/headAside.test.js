@@ -10,7 +10,7 @@ describe('Head Aside Component', () => {
     },
   };
 
-  it('elements on screen to render must', () => {
+  it('renders elements on screen', () => {
     render(<HeadAside {...defaultProps} />);
     const headerLogo = screen.getAllByAltText('PS logo');
     expect(headerLogo.length).toBe(2);
@@ -20,7 +20,7 @@ describe('Head Aside Component', () => {
     });
   });
 
-  it('check if correct props are rendered', () => {
+  it('checks if correct props are rendered', () => {
     render(<HeadAside {...defaultProps} />);
 
     expect(screen.getByText('Your Voice Matters').previousSibling).toHaveClass(

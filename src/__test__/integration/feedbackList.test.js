@@ -11,7 +11,7 @@ jest.mock('next/navigation', () => ({
 
 const mock = new MockAdapter(axios);
 
-describe('FeedbackList Component', () => {
+describe('FeedbackList Page', () => {
   const mockPush = jest.fn();
 
   beforeEach(() => {
@@ -159,11 +159,18 @@ describe('FeedbackList Component', () => {
   });
 
   it('displays errors when API responses fail', async () => {
-    //setup API call data
+    //successful me call to check other failed api responses
     const userMeData = {
-      error: 'Get user details failed',
+      message: 'User found',
+      user: {
+        username: 'testuser',
+        role: 0,
+        email: 'testuser@example.com',
+      },
     };
+    mock.onGet('/api/users/me').reply(200, userMeData);
 
+    //setup API call data
     const limit = 2;
     const feedbackData = {
       erorr: 'An error occurred',
@@ -174,7 +181,6 @@ describe('FeedbackList Component', () => {
     };
 
     //setup mock API calls
-    mock.onGet('/api/users/me').reply(400, userMeData);
     mock
       .onGet(`/api/users/feedbacks?page=1&limit=${limit}`)
       .reply(500, feedbackData);
@@ -197,12 +203,6 @@ describe('FeedbackList Component', () => {
       expect(screen.getByLabelText('prev button')).toHaveClass('disabled');
     });
 
-    /***************ME CALL***************/
-    await waitFor(() => {
-      //expect couldn't fetch in header
-      expect(screen.getByText(`couldn't fetch`)).toBeInTheDocument();
-    });
-
     /***************LOGOUT***************/
     //click the logout button
     const logoutButton = screen.getByText('Logout');
@@ -214,6 +214,26 @@ describe('FeedbackList Component', () => {
     //check success
     await waitFor(() => {
       expect(screen.getByText('An error occurred')).toBeInTheDocument();
+    });
+  });
+
+  it('displays errors for ME call', async () => {
+    //setup API call data
+    const userMeData = {
+      error: 'Get user details failed',
+    };
+
+    //setup mock API calls
+    mock.onGet('/api/users/me').reply(400, userMeData);
+
+    //render the component
+    render(<FeedbackList />);
+
+    //expect error msg on screen
+    await waitFor(() => {
+      expect(
+        screen.getByText('reload the page to try again')
+      ).toBeInTheDocument();
     });
   });
 });

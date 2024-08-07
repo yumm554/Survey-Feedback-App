@@ -21,7 +21,7 @@ describe('Setting Page', () => {
     mock.reset();
   });
 
-  it('success on me call, updating password, logout, delete account and show msgs on screen', async () => {
+  it('handles success on me call, password update, logout, and account deletion and display msgs on screen', async () => {
     /***************ME CALL***************/
     //setup mockup api for me call
     const userMeData = {
@@ -135,29 +135,20 @@ describe('Setting Page', () => {
     );
   });
 
-  it('error on me call, updating password, logout, delete account and show msgs on screen', async () => {
-    /***************ME CALL***************/
-    //setup mockup api for me call
+  it('handles error on password update, logout, and account deletion and display msgs on screen', async () => {
+    //successful me call to check other failed api responses
     const userMeData = {
-      error: 'Get user details failed',
+      message: 'User found',
+      user: {
+        username: 'testuser',
+        role: 0,
+        email: 'testuser@example.com',
+      },
     };
-    mock.onGet('/api/users/me').reply(400, userMeData);
+    mock.onGet('/api/users/me').reply(200, userMeData);
 
     //render the component
     render(<Setting />);
-
-    //check user returned on screen
-    await waitFor(() => {
-      expect(screen.getByText('Username').nextSibling.textContent).toBe(
-        `couldn't fetch`
-      );
-      expect(screen.getByText('Email').nextSibling.textContent).toBe(
-        `couldn't fetch`
-      );
-      expect(screen.getByText('Role').nextSibling.textContent).toBe('User');
-
-      expect(screen.getAllByText(`couldn't fetch`).length).toBe(3);
-    });
 
     /***************UPDATE PASSWORD***************/
     //setup mock api to update password
@@ -240,7 +231,7 @@ describe('Setting Page', () => {
     );
   });
 
-  it('if password does not match', async () => {
+  it('handles when password does not match', async () => {
     //setup mock api
     const userData = {
       message: 'Password Successfully Updated',
@@ -272,6 +263,24 @@ describe('Setting Page', () => {
       expect(screen.getByText('Password does not match')).toBeInTheDocument();
       expect(passwordInput.value).toBe('');
       expect(confirmPasswordInput.value).toBe('');
+    });
+  });
+
+  it('handles error on me call and display msgs on screen', async () => {
+    //setup mockup api for me call
+    const userMeData = {
+      error: 'Get user details failed',
+    };
+    mock.onGet('/api/users/me').reply(400, userMeData);
+
+    //render the component
+    render(<Setting />);
+
+    //expect error on screen
+    await waitFor(() => {
+      expect(
+        screen.getByText('reload the page to try again')
+      ).toBeInTheDocument();
     });
   });
 });

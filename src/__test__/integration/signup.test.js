@@ -21,7 +21,7 @@ describe('Signup Page', () => {
     mock.reset();
   });
 
-  it('should signup successfully as User and show success msg on screen', async () => {
+  it('signs up successfully as a User and displays a success message on the screen', async () => {
     //setup mock api
     const userData = {
       message: 'Successfully Signed Up',
@@ -60,7 +60,7 @@ describe('Signup Page', () => {
     expect(mockPush).toHaveBeenCalledWith('/login');
   });
 
-  it('should signup successfully as Admin and show success msg on screen', async () => {
+  it('signs up successfully as a User and displays a success message on the screen', async () => {
     //setup mock api
     const userData = {
       message: 'Successfully Signed Up',
@@ -102,7 +102,7 @@ describe('Signup Page', () => {
     expect(mockPush).toHaveBeenCalledWith('/login');
   });
 
-  it('if password does not match', async () => {
+  it('displays an error message when passwords do not match', async () => {
     //setup mock api
     const userData = {
       message: 'Successfully Signed Up',
@@ -137,7 +137,7 @@ describe('Signup Page', () => {
     });
   });
 
-  it('error signing up and show error msg on screen', async () => {
+  it('displays an error message when sign-up fails', async () => {
     //setup mock api
     const userData = {
       error: { message: 'User already exists', type: 2 },
@@ -175,7 +175,7 @@ describe('Signup Page', () => {
     });
   });
 
-  it('if no error msg, static message should appear on screen', async () => {
+  it('displays a default error message when no message is provided', async () => {
     //setup mock api
     const userData = {
       error: { message: '' },

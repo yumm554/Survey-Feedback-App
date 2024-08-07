@@ -9,7 +9,7 @@ jest.mock('next/navigation', () => ({
 }));
 const mock = new MockAdapter(axios);
 
-describe('Login Hook', () => {
+describe('Logout Hook', () => {
   const mockPush = jest.fn();
 
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('Login Hook', () => {
     mock.reset();
   });
 
-  it('should fetch user details', async () => {
+  it('handles successful logout', async () => {
     const userData = {
       message: 'logout successfully',
     };
@@ -48,7 +48,7 @@ describe('Login Hook', () => {
     expect(mockPush).toHaveBeenCalledWith('/login');
   });
 
-  it('error fetching data', async () => {
+  it('handles error when logging out', async () => {
     const userData = {
       error: 'An error occured',
     };

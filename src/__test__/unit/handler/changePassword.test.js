@@ -18,7 +18,7 @@ describe('Change Password Hook', () => {
     mock.reset();
   });
 
-  it('should change password', async () => {
+  it('changes password successfully', async () => {
     const userData = {
       message: 'Password Successfully Updated',
     };
@@ -49,7 +49,7 @@ describe('Change Password Hook', () => {
     });
   });
 
-  it('if password does not match', async () => {
+  it('it displays error when password does not match', async () => {
     const password = {
       old_password: 'oldPassword123',
       password: 'newPassword123',
@@ -74,7 +74,7 @@ describe('Change Password Hook', () => {
     });
   });
 
-  it('error fetching data', async () => {
+  it('handles error when changing password fails', async () => {
     const userData = {
       error: { message: 'Old password is incorrect', type: 2 },
     };
@@ -99,7 +99,7 @@ describe('Change Password Hook', () => {
     );
   });
 
-  it('if no error msg, static message should appear', async () => {
+  it('displays a default error message when no message is provided', async () => {
     const userData = {
       error: { message: '' },
     };
