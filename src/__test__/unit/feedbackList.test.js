@@ -68,6 +68,9 @@ describe('Feedback List Component', () => {
     expect(screen.getByText('user2@example.com')).toBeInTheDocument();
     expect(screen.getByText('4')).toBeInTheDocument();
 
+    //expect total feedbacks
+    expect(screen.getByText('S-4')).toBeInTheDocument();
+
     // Check pagination
     expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
   });
@@ -141,5 +144,43 @@ describe('Feedback List Component', () => {
 
     render(<FeedbackList />);
     expect(screen.getByText('An error occurred')).toBeInTheDocument();
+  });
+
+  it('handles error when me call fails and retry', () => {
+    GetUserDetails.mockReturnValue({
+      isError: true,
+    });
+
+    render(<FeedbackList />);
+
+    //expect error on screen
+    expect(
+      screen.getByText(`Couldn't connect to the internet!`)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'try again' })
+    ).toBeInTheDocument();
+  });
+
+  it('handles if there are no feedbacks in the list', async () => {
+    useFetchFeedbacks.mockReturnValue({
+      feedbacks: [],
+      pagination: { page: 1, totalPages: 0, totalFeedbacks: 0 },
+      isFeedbackLoading: false,
+      isFeedbackError: '',
+    });
+
+    render(<FeedbackList />);
+
+    //expect 0 feedbacks
+    expect(screen.getByText('S-0')).toBeInTheDocument();
+
+    // Check default text
+    expect(
+      screen.getByText('There are no feedbacks to list')
+    ).toBeInTheDocument();
+
+    // Check pagination
+    expect(screen.getByText('Page 1 of 1')).toBeInTheDocument();
   });
 });

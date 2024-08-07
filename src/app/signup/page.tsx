@@ -53,7 +53,7 @@ const SignUp = () => {
           light: 'light-purple',
         }}
       />
-      <div className="scrollable max-height max-height-inner full-width-desktop padding-around-global">
+      <div className="scrollable max-height max-height-inner full-width-desktop padding-around-global mob__col mob__col-gap">
         <div className="main__wrapper full-width-desktop flex__1 full-height-desktop">
           <div className="form__white row-gap row-gap_20 padding-around-global">
             <div className="align-center signup__heading">
@@ -226,15 +226,15 @@ const SignUp = () => {
             </p>
           </div>
         </div>
-      </div>
-      <div className="side-width full-width desktop-hide tab-hide">
-        <BulletPoints
-          colors={{
-            normal: 'purple',
-            lighter: 'lighter-purple',
-            light: 'light-purple',
-          }}
-        />
+        <div className="side-width full-width desktop-hide tab-hide">
+          <BulletPoints
+            colors={{
+              normal: 'purple',
+              lighter: 'lighter-purple',
+              light: 'light-purple',
+            }}
+          />
+        </div>
       </div>
     </div>
   );

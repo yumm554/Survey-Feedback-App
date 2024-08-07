@@ -24,25 +24,24 @@ const useFetchFeedbacks = (page: number, limit: number) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
+  const fetchFeedbacks = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      const response = await axios.get(
+        `/api/users/feedbacks?page=${page}&limit=${limit}`
+      );
+      setFeedbacks(response.data?.feedbacks);
+      setPagination(response.data?.pagination);
+    } catch (error) {
+      console.error('Error fetching feedbacks:', error);
+      setError('An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchFeedbacks = async () => {
-      try {
-        setError('');
-        setLoading(true);
-        const response = await axios.get(
-          `/api/users/feedbacks?page=${page}&limit=${limit}`
-        );
-
-        setFeedbacks(response.data?.feedbacks);
-        setPagination(response.data?.pagination);
-      } catch (error) {
-        console.error('Error fetching feedbacks:', error);
-        setError('An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchFeedbacks();
   }, [page]);
 
@@ -51,6 +50,7 @@ const useFetchFeedbacks = (page: number, limit: number) => {
     pagination,
     isFeedbackLoading: loading,
     isFeedbackError: error,
+    retry: fetchFeedbacks,
   };
 };
 

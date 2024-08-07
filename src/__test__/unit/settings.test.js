@@ -178,4 +178,20 @@ describe('Setting Component', () => {
       screen.getByText('Password Successfully Updated')
     ).toBeInTheDocument();
   });
+
+  it('handles error when me call fails and retry', () => {
+    GetUserDetails.mockReturnValue({
+      isError: true,
+    });
+
+    render(<Setting />);
+
+    //expect error on screen
+    expect(
+      screen.getByText(`Couldn't connect to the internet!`)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'try again' })
+    ).toBeInTheDocument();
+  });
 });

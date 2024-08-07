@@ -51,3 +51,15 @@ body {
     padding: 0 15px !important;
   }
 }
+
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .side-width-feedback .row-gap-mob {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+  .side-width-feedback .row-gap-mob > * {
+    margin-right: 10px !important;
+    margin-bottom: 10px !important;
+  }
+}

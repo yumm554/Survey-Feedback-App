@@ -266,7 +266,7 @@ describe('Setting Page', () => {
     });
   });
 
-  it('handles error on me call and display msgs on screen', async () => {
+  it('handles error on me call and retry', async () => {
     //setup mockup api for me call
     const userMeData = {
       error: 'Get user details failed',
@@ -279,8 +279,37 @@ describe('Setting Page', () => {
     //expect error on screen
     await waitFor(() => {
       expect(
-        screen.getByText('reload the page to try again')
+        screen.getByText(`Couldn't connect to the internet!`)
       ).toBeInTheDocument();
+    });
+
+    const retryButton = screen.getByRole('button', { name: 'try again' });
+    expect(retryButton).toBeInTheDocument();
+
+    // Set up mock API response for retry call
+    const userMeRetryData = {
+      message: 'User found',
+      user: {
+        username: 'testuser',
+        role: 0,
+        email: 'testuser@example.com',
+      },
+    };
+    mock.onGet('/api/users/me').reply(200, userMeRetryData);
+
+    //test retry button
+    fireEvent.click(retryButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Username').nextSibling.textContent).toBe(
+        'testuser'
+      );
+      expect(screen.getByText('testuser@example.com')).toBeInTheDocument();
+      expect(screen.getByText('Role').nextSibling.textContent).toBe('User');
+
+      //expect username and role both in header and body
+      expect(screen.getAllByText('testuser').length).toBe(2);
+      expect(screen.getAllByText('User').length).toBe(2);
     });
   });
 });

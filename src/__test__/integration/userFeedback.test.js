@@ -150,7 +150,7 @@ describe('User Feedback Page', () => {
     });
   });
 
-  it('handles error on me call and displays error message on screen', async () => {
+  it('handles error on me call and retry', async () => {
     //setup mockup api for me call
     const userMeData = {
       error: 'Get user details failed',
@@ -160,11 +160,36 @@ describe('User Feedback Page', () => {
     //render the component
     render(<UserFeedback />);
 
-    //check error msg on screen
+    //expect error on screen
     await waitFor(() => {
       expect(
-        screen.getByText('reload the page to try again')
+        screen.getByText(`Couldn't connect to the internet!`)
       ).toBeInTheDocument();
+    });
+
+    const retryButton = screen.getByRole('button', { name: 'try again' });
+    expect(retryButton).toBeInTheDocument();
+
+    // Set up mock API response for retry call
+    const userMeRetryData = {
+      message: 'User found',
+      user: {
+        username: 'testuser',
+        role: 0,
+        email: 'testuser@example.com',
+      },
+    };
+    mock.onGet('/api/users/me').reply(200, userMeRetryData);
+
+    //test retry button
+    fireEvent.click(retryButton);
+
+    await waitFor(() => {
+      //expect username and role in header
+      expect(screen.getAllByText('testuser').length).toBe(1);
+      expect(screen.getAllByText('User').length).toBe(1);
+
+      expect(screen.getByLabelText('Email').value).toBe('testuser@example.com');
     });
   });
 });

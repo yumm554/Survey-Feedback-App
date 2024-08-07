@@ -211,9 +211,8 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
                               <div className="align-center">
                                 <span
                                   className={
-                                    'delete-account ' + disable
-                                      ? 'disabled'
-                                      : ''
+                                    'delete-account ' +
+                                    (disable ? 'disabled' : '')
                                   }
                                   onClick={handleDelete}
                                 >
@@ -389,7 +388,8 @@ const Sidebar: React.FC<HeadAsideProps> = ({ data }) => {
                             <div className="align-center">
                               <span
                                 className={
-                                  'delete-account ' + disable ? 'disabled' : ''
+                                  'delete-account ' +
+                                  (disable ? 'disabled' : '')
                                 }
                                 onClick={handleDelete}
                               >

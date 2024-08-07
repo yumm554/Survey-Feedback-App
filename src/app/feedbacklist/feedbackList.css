@@ -50,7 +50,7 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
 
 .rating-box-light {
   border-radius: 100px;
-  width: 60%;
+  width: 100px;
   margin-right: 0;
   margin-left: auto;
   padding: 0.3rem;
@@ -135,9 +135,6 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
     padding: 1rem 0.2rem;
   }
 
-  .rating-box-light {
-    width: -webkit-fill-available;
-  }
   .rating-col {
     margin-right: 5px;
   }
@@ -166,6 +163,9 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
     display: flex;
     width: 100%;
   }
+  .rating-box-light {
+    width: 80px;
+  }
   .collapsed-cell {
     flex: 1;
     overflow: hidden;
@@ -177,6 +177,5 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
     flex: 1;
     width: 100px;
     display: flex;
-    align-items: center;
   }
 }

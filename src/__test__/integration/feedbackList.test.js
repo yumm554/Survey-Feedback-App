@@ -113,6 +113,9 @@ describe('FeedbackList Page', () => {
       expect(screen.getByText('user2@example.com')).toBeInTheDocument();
       expect(screen.getByText('4')).toBeInTheDocument();
 
+      //expect 0 feedbacks
+      expect(screen.getByText('S-4')).toBeInTheDocument();
+
       expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
       expect(screen.getByLabelText('prev button')).toHaveClass('disabled');
     });
@@ -217,23 +220,119 @@ describe('FeedbackList Page', () => {
     });
   });
 
-  it('displays errors for ME call', async () => {
-    //setup API call data
+  it('handles error on me call and retry', async () => {
+    //setup mockup api for me call
     const userMeData = {
       error: 'Get user details failed',
     };
-
-    //setup mock API calls
     mock.onGet('/api/users/me').reply(400, userMeData);
 
     //render the component
     render(<FeedbackList />);
 
-    //expect error msg on screen
+    //expect error on screen
     await waitFor(() => {
       expect(
-        screen.getByText('reload the page to try again')
+        screen.getByText(`Couldn't connect to the internet!`)
       ).toBeInTheDocument();
+    });
+
+    const retryButton = screen.getByRole('button', { name: 'try again' });
+    expect(retryButton).toBeInTheDocument();
+
+    // Set up mock API response for retry call
+    const userMeRetryData = {
+      message: 'User found',
+      user: {
+        username: 'testuser',
+        role: 0,
+        email: 'testuser@example.com',
+      },
+    };
+    mock.onGet('/api/users/me').reply(200, userMeRetryData);
+
+    //test retry button
+    fireEvent.click(retryButton);
+
+    await waitFor(() => {
+      //check user data on screen
+      expect(screen.getByText('testuser')).toBeInTheDocument();
+      expect(screen.getByText('User')).toBeInTheDocument();
+    });
+  });
+
+  it('handles if there are no feedbacks in the list', async () => {
+    //setup API call data
+    const userMeData = {
+      message: 'User found',
+      user: {
+        username: 'testuser',
+        role: 0,
+        email: 'testuser@example.com',
+      },
+    };
+
+    const limit = 10;
+    const feedbackData = {
+      feedbacks: [],
+      pagination: {
+        page: 1,
+        totalPages: 0,
+        totalFeedbacks: 0,
+      },
+    };
+
+    const userLogoutData = {
+      message: 'Logout successfully',
+    };
+
+    //setup mock API calls
+    mock.onGet('/api/users/me').reply(200, userMeData);
+    mock
+      .onGet(`/api/users/feedbacks?page=1&limit=${limit}`)
+      .reply(200, feedbackData);
+    mock.onGet('/api/users/logout').reply(200, userLogoutData);
+
+    //render the component
+    render(<FeedbackList />);
+
+    /***************LIST FEEDBACKS***************/
+    //check loading
+    expect(screen.getByText('loading...')).toBeInTheDocument();
+    //check pagination buttons to be disabled
+    expect(screen.getByLabelText('next button')).toHaveClass('disabled');
+    expect(screen.getByLabelText('prev button')).toHaveClass('disabled');
+
+    //check default text and pagination
+    await waitFor(() => {
+      //expect 0 feedbacks
+      expect(screen.getByText('S-0')).toBeInTheDocument();
+
+      expect(
+        screen.getByText('There are no feedbacks to list')
+      ).toBeInTheDocument();
+
+      expect(screen.getByText('Page 1 of 1')).toBeInTheDocument();
+    });
+
+    /***************ME CALL***************/
+    await waitFor(() => {
+      //expect username and role in header
+      expect(screen.getByText('testuser')).toBeInTheDocument();
+      expect(screen.getByText('User')).toBeInTheDocument();
+    });
+
+    /***************LOGOUT***************/
+    //click the logout button
+    const logoutButton = screen.getByText('Logout');
+    fireEvent.click(logoutButton);
+
+    //check loading
+    expect(screen.getByText('Logging Out')).toBeInTheDocument();
+
+    //check success
+    await waitFor(() => {
+      expect(screen.getByText('Redirecting...')).toBeInTheDocument();
     });
   });
 });

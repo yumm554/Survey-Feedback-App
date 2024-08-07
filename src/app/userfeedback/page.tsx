@@ -12,6 +12,9 @@ import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import GetUserDetails from '@/handlers/me';
 import useFeedbackForm from '@/handlers/feedbackForm';
+import ErrorFetchingUser from '@/components/ErrorFetchingUser';
+import { useDebounceRetry } from '@/utils/debounceRetry';
+import BulletPoints from '@/components/BulletPoints';
 
 interface Feedback {
   name: string;
@@ -34,7 +37,7 @@ const UserFeedback = () => {
   };
 
   //me call
-  const { user, isAdmin, isLoading, isError } = GetUserDetails();
+  const { user, isAdmin, isLoading, isError, retry } = GetUserDetails();
 
   //form submit
   const {
@@ -51,12 +54,13 @@ const UserFeedback = () => {
     onSubmit(updatedFeedback, setFeedback);
   };
 
+  //retry calls on internet back connection
+  useDebounceRetry(retry);
+
   return (
     <>
       {isError ? (
-        <div className="main__wrapper max-height">
-          <div className="error">reload the page to try again</div>
-        </div>
+        <ErrorFetchingUser retryCalls={{ retry }}></ErrorFetchingUser>
       ) : (
         <div>
           <Sidebar
@@ -221,24 +225,13 @@ const UserFeedback = () => {
               </div>
             </div>
             <div className="side-width-feedback full-width">
-              <ul className="bullet_list_items row-gap row-gap_20 smaller-row-gap">
-                <li className="align-center">
-                  <div className="bullet red"></div>
-                  <p>Your Voice Matters</p>
-                </li>
-                <li className="align-center">
-                  <div className="bullet lighter-red"></div>
-                  <p>Real Impact</p>
-                </li>
-                <li className="align-center">
-                  <div className="bullet light-red"></div>
-                  <p>Easy Participation</p>
-                </li>
-                <li className="align-center">
-                  <div className="bullet highlight"></div>
-                  <p>Personalized Experience</p>
-                </li>
-              </ul>
+              <BulletPoints
+                colors={{
+                  normal: 'red',
+                  lighter: 'lighter-red',
+                  light: 'light-red',
+                }}
+              />
             </div>
           </div>
         </div>

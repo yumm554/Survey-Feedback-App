@@ -12,6 +12,9 @@ body {
   border-radius: 6px !important;
   width: auto;
 }
+.settings-form-input {
+  width: 450px !important;
+}
 @media screen and (max-width: 1024px) and (min-width: 768px) {
   body {
     height: auto;
@@ -30,7 +33,7 @@ body {
     background-color: rgba(0, 0, 0, 0.2);
   }
   .settings-form-input {
-    width: 60% !important;
+    width: 70% !important;
   }
 }
 
@@ -61,5 +64,8 @@ body {
   .mob__col-left > *:not(:last-child) {
     margin-bottom: 20px;
     margin-right: 0;
+  }
+  .settings-form-input {
+    width: 100% !important;
   }
 }

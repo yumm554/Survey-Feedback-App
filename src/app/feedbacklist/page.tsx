@@ -6,12 +6,14 @@ import {
   RatingStar,
 } from '@/assets/icons/getIcon';
 import './feedbackList.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import RectangularBoxes from '@/components/RectangularBoxes';
 import GetUserDetails from '@/handlers/me';
 import useFetchFeedbacks from '@/handlers/feedbacks';
+import { useDebounceRetry } from '@/utils/debounceRetry';
+import ErrorFetchingUser from '@/components/ErrorFetchingUser';
 
 const FeedbackList: React.FC = () => {
   const [mobNav, setMobNav] = useState<boolean>(false);
@@ -19,18 +21,26 @@ const FeedbackList: React.FC = () => {
   const limit = 10;
 
   //me call
-  const { user, isAdmin, isLoading, isError } = GetUserDetails();
+  const { user, isAdmin, isLoading, isError, retry } = GetUserDetails();
 
   //fetch feedback
-  const { feedbacks, pagination, isFeedbackLoading, isFeedbackError } =
-    useFetchFeedbacks(page, limit);
+  const {
+    feedbacks,
+    pagination,
+    isFeedbackLoading,
+    isFeedbackError,
+    retry: retryFeedbacks,
+  } = useFetchFeedbacks(page, limit);
+
+  //retry calls on internet back connection
+  useDebounceRetry(retry, retryFeedbacks);
 
   return (
     <>
       {isError ? (
-        <div className="main__wrapper max-height">
-          <div className="error">reload the page to try again</div>
-        </div>
+        <ErrorFetchingUser
+          retryCalls={{ retry, retrySpecificty: retryFeedbacks }}
+        ></ErrorFetchingUser>
       ) : (
         <div className="col__flex">
           <Sidebar
@@ -67,7 +77,8 @@ const FeedbackList: React.FC = () => {
                     <div className="text-loader"></div>
                   ) : (
                     <p>
-                      Over {pagination.totalFeedbacks} responses have been
+                      Over {pagination.totalFeedbacks} response{' '}
+                      {pagination.totalFeedbacks > 1 ? 's' : ''} have been
                       collected from users.
                     </p>
                   )}
@@ -92,7 +103,7 @@ const FeedbackList: React.FC = () => {
                   <tr>
                     <th className="collapsed-cell">Name</th>
                     <th className="collapsed-cell">Email</th>
-                    <th className="rating-cell align-right">Rating</th>
+                    <th className="align-right">Rating</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -104,7 +115,7 @@ const FeedbackList: React.FC = () => {
                     <tr className="no-background">
                       <td>loading...</td>
                     </tr>
-                  ) : (
+                  ) : feedbacks.length ? (
                     feedbacks.map((feedback) => (
                       <tr key={feedback._id}>
                         <td className="collapsed-cell">{feedback.name}</td>
@@ -117,17 +128,19 @@ const FeedbackList: React.FC = () => {
                         </td>
                       </tr>
                     ))
+                  ) : (
+                    <tr className="no-background">
+                      <td>There are no feedbacks to list</td>
+                    </tr>
                   )}
                 </tbody>
               </table>
 
               <div className="space-between mob__col mob__col-gap pagination padding-around-global">
-                <span className="button-lookalike">
-                  Showing 10 rows per page
-                </span>
+                <span className="button-lookalike">Show 10 rows per page</span>
                 <div className="align-center">
                   <span className="button-lookalike">
-                    Page {pagination.page} of {pagination.totalPages}
+                    Page {pagination.page} of {pagination.totalPages || 1}
                   </span>
                   <span
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}

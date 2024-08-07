@@ -13,6 +13,8 @@ import {
 import Header from '@/components/Header';
 import GetUserDetails from '@/handlers/me';
 import useChangePassword from '@/handlers/changePassword';
+import ErrorFetchingUser from '@/components/ErrorFetchingUser';
+import { useDebounceRetry } from '@/utils/debounceRetry';
 
 interface Password {
   old_password: string;
@@ -32,7 +34,7 @@ const Setting = () => {
     useState<boolean>(false);
 
   //me call
-  const { user, isAdmin, isLoading, isError } = GetUserDetails();
+  const { user, isAdmin, isLoading, isError, retry } = GetUserDetails();
 
   //form submit
   const {
@@ -47,12 +49,13 @@ const Setting = () => {
     onUpdate(user.email, password, setPassword);
   };
 
+  //retry calls on internet back connection
+  useDebounceRetry(retry);
+
   return (
     <>
       {isError ? (
-        <div className="main__wrapper max-height">
-          <div className="error">reload the page to try again</div>
-        </div>
+        <ErrorFetchingUser retryCalls={{ retry }}></ErrorFetchingUser>
       ) : (
         <div className="col__flex">
           <Sidebar
@@ -138,7 +141,7 @@ const Setting = () => {
                       }
                     />
 
-                    <div className="relative input settings-form-input">
+                    <div className="relative settings-form-input">
                       <label htmlFor="password">Password</label>
                       <input
                         id="password"
@@ -164,7 +167,7 @@ const Setting = () => {
                       </p>
                     </div>
 
-                    <div className="relative input settings-form-input">
+                    <div className="relative settings-form-input">
                       <label htmlFor="password_confirmation">
                         Confirm Password
                       </label>

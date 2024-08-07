@@ -135,7 +135,7 @@ textarea {
 }
 
 .input {
-  width: fit-content;
+  width: 100%;
 }
 
 input[type='checkbox'] {
@@ -476,9 +476,7 @@ ul li {
   textarea {
     width: -webkit-fill-available;
   }
-  .input {
-    width: 50%;
-  }
+
   .tab__col {
     flex-direction: column;
   }
@@ -561,13 +559,13 @@ ul li {
   .full-width {
     width: -webkit-fill-available !important;
   }
-  .smaller-row-gap {
+  .row-gap-mob {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
   }
-  .smaller-row-gap > * {
+  .row-gap-mob > * {
     margin-right: 10px;
     margin-bottom: 10px !important;
   }

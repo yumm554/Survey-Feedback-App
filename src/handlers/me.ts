@@ -13,29 +13,36 @@ const GetUserDetails = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
+  const getUserDetails = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      const response = await axios.get(`/api/users/me`);
+      setUser({
+        username: response.data?.user.username,
+        role: response.data?.user.role,
+        email: response.data?.user.email,
+      });
+      setIsAdmin(response.data?.user.role === 1);
+    } catch (error: any) {
+      setError('Get user details failed');
+      console.log('Get user details failed', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const getUserDetails = async () => {
-      try {
-        setError('');
-        setLoading(true);
-        const response = await axios.get(`/api/users/me`);
-        setUser({
-          username: response.data?.user.username,
-          role: response.data?.user.role,
-          email: response.data?.user.email,
-        });
-        setIsAdmin(response.data?.user.role === 1);
-      } catch (error: any) {
-        setError('Get user details failed');
-        console.log('Get user details failed', error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
     getUserDetails();
   }, []);
 
-  return { user, isAdmin, isLoading: loading, isError: error };
+  return {
+    user,
+    isAdmin,
+    isLoading: loading,
+    isError: error,
+    retry: getUserDetails,
+  };
 };
 
 export default GetUserDetails;

@@ -13,7 +13,7 @@ const BulletPoints: React.FC<HeadAsideProps> = ({ colors }) => {
   const { normal, lighter, light } = colors;
 
   return (
-    <ul className="bullet_list_items row-gap row-gap_20 smaller-row-gap">
+    <ul className="bullet_list_items row-gap row-gap_20 row-gap-mob">
       <li className="align-center">
         <div className={`bullet ${normal}`}></div>
         <p>Your Voice Matters</p>

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 const useDeleteAccount = () => {
   const router = useRouter();
-  const [disable, setDisable] = useState<boolean>(true);
+  const [disable, setDisable] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
