@@ -80,6 +80,7 @@ const UserFeedback = () => {
               setMobNav,
               isLoading,
               sidebar: false,
+              isAdmin,
             }}
           />
           <div className="col__flex tab__col padding-around-global feedback_wrapper align-center mob__col mob__col-gap">

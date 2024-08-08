@@ -9,6 +9,7 @@ describe('Header Component', () => {
       setMobNav: jest.fn(),
       isLoading: false,
       sidebar: true,
+      isAdmin: false,
     },
   };
 
@@ -27,7 +28,7 @@ describe('Header Component', () => {
     expect(defaultProps.data.setMobNav).toHaveBeenCalledWith(true);
   });
 
-  it('renders settings link and PS logo when sidebar is false', () => {
+  it('renders a basic header for user when sidebar is false', () => {
     const defaultPropsWithoutSidebar = {
       data: { ...defaultProps.data, sidebar: false },
     };
@@ -38,6 +39,19 @@ describe('Header Component', () => {
     const logo = screen.getByAltText('PS logo');
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute('src', expect.stringMatching('PS-logo.png'));
+  });
+
+  it('renders a basic header for admin when sidebar is false', () => {
+    const defaultPropsWithoutSidebar = {
+      data: {
+        ...defaultProps.data,
+        sidebar: false,
+        isAdmin: true,
+      },
+    };
+    render(<Header {...defaultPropsWithoutSidebar} />);
+
+    expect(screen.getByText('Dashboard')).toBeInTheDocument();
   });
 
   it('shows loader when isLoading is true', () => {

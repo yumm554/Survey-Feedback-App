@@ -23,6 +23,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         totalPages: Math.ceil(totalFeedbacks / limit),
         totalFeedbacks,
       },
+      success: true,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

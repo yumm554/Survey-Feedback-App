@@ -9,12 +9,13 @@ export async function GET(request: NextRequest) {
   try {
     const userId = await getDataFromToken(request);
     const user = await User.findOne({ _id: userId }).select('-password');
-    const { username, email, role } = user;
+    const { username, email, role, isAdmin } = user;
     return NextResponse.json({
       message: 'User found',
-      user: { username, email, role },
+      user: { username, email, role, isAdmin },
+      success: true,
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message, status: 400 });
+    return NextResponse.json({ error: error.message, status: 500 });
   }
 }

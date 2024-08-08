@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     //check if required fields are not empty
     if (!username || !email || !password) {
       return NextResponse.json(
-        { error: { message: 'Fill all the required fields', type: 0 } },
+        { error: { message: 'Fill all the required fields' } },
         { status: 400 }
       );
     }
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     //check if key is not empty
     if (role === 1 && !key) {
       return NextResponse.json(
-        { error: { message: 'Key is required', type: 0 } },
+        { error: { message: 'Key is required' } },
         { status: 400 }
       );
     }
@@ -31,15 +31,15 @@ export async function POST(request: NextRequest) {
     const hashedAdminKey = process.env.ADMIN_KEY;
     if (!hashedAdminKey)
       return NextResponse.json(
-        { error: { message: 'An error occured', type: 1 } },
-        { status: 400 }
+        { error: { message: 'An error occured' } },
+        { status: 500 }
       );
     //check if key is correct
     const isKeyValid = await bcryptjs.compare(key, hashedAdminKey);
     if (role === 1 && !isKeyValid) {
       return NextResponse.json(
-        { error: { message: 'Key is not valid', type: 1 } },
-        { status: 400 }
+        { error: { message: 'Key is not valid' } },
+        { status: 401 }
       );
     }
 
@@ -50,18 +50,17 @@ export async function POST(request: NextRequest) {
         {
           error: {
             message: 'An account with this email already exists',
-            type: 2,
           },
         },
-        { status: 400 }
+        { status: 409 }
       );
     }
 
     const existingUsernameUser = await User.findOne({ username });
     if (existingUsernameUser) {
       return NextResponse.json(
-        { error: { message: 'Username is already taken', type: 3 } },
-        { status: 400 }
+        { error: { message: 'Username is already taken' } },
+        { status: 409 }
       );
     }
 
@@ -74,6 +73,7 @@ export async function POST(request: NextRequest) {
       email,
       role,
       password: hashedPassword,
+      isAdmin: role === 1,
     });
 
     const savedUser = await newUser.save();

@@ -25,7 +25,7 @@ export async function PATCH(request: NextRequest) {
     if (!isMatch) {
       return NextResponse.json(
         { error: { message: 'Old password is incorrect', type: 2 } },
-        { status: 400 }
+        { status: 401 }
       );
     }
 

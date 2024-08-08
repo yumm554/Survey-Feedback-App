@@ -23,7 +23,7 @@ const GetUserDetails = () => {
         role: response.data?.user.role,
         email: response.data?.user.email,
       });
-      setIsAdmin(response.data?.user.role === 1);
+      setIsAdmin(response.data?.user.isAdmin);
     } catch (error: any) {
       setError('Get user details failed');
       console.log('Get user details failed', error.message);

@@ -71,7 +71,14 @@ const Setting = () => {
           />
           <div className="flex__1 max-height scrollable">
             <Header
-              data={{ user, mobNav, setMobNav, isLoading, sidebar: true }}
+              data={{
+                user,
+                mobNav,
+                setMobNav,
+                isLoading,
+                sidebar: true,
+                isAdmin,
+              }}
             />
             <div className="form__white dashboard-col padding-around-global row-gap row-gap_20 margin-around-global">
               <div className="row-gap row-gap_20 padding-around-global border-around">
@@ -108,7 +115,7 @@ const Setting = () => {
                       <div className="text-loader align-right"></div>
                     ) : (
                       <p className="align-right mob-no-right">
-                        {user.role === 0 ? 'User' : 'Admin'}
+                        {isAdmin ? 'Admin' : 'User'}
                       </p>
                     )}
                   </div>

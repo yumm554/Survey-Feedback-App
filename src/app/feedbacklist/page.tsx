@@ -57,7 +57,14 @@ const FeedbackList: React.FC = () => {
 
           <div className="flex__1 max-height scrollable">
             <Header
-              data={{ user, mobNav, setMobNav, isLoading, sidebar: true }}
+              data={{
+                user,
+                mobNav,
+                setMobNav,
+                isLoading,
+                sidebar: true,
+                isAdmin,
+              }}
             />
             <div className="form__white dashboard-col margin-around-global row-gap row-gap_20 padding-around-global">
               <div className="align-center overview__heading">

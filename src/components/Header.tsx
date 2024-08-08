@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Logo from './Logo';
 
 const Header = ({ data }: any) => {
-  const { user, mobNav, setMobNav, isLoading, sidebar } = data;
+  const { user, mobNav, setMobNav, isLoading, sidebar, isAdmin } = data;
 
   return (
     <>
@@ -36,14 +36,22 @@ const Header = ({ data }: any) => {
         </>
 
         <div className="align-center">
-          {!sidebar && (
-            <Link
-              href="/settings"
-              className="no-underline align-center mob-hide tab-hide"
-            >
-              <span className="black-regular">Settings</span> <NavArrow />
-            </Link>
-          )}
+          {!sidebar &&
+            (isAdmin ? (
+              <Link
+                href="/feedbackList"
+                className="no-underline align-center mob-hide tab-hide"
+              >
+                <span className="black-regular">Dashboard</span> <NavArrow />
+              </Link>
+            ) : (
+              <Link
+                href="/settings"
+                className="no-underline align-center mob-hide tab-hide"
+              >
+                <span className="black-regular">Settings</span> <NavArrow />
+              </Link>
+            ))}
           <div className="align-center">
             <div className="user-border">
               <User />
@@ -64,7 +72,7 @@ const Header = ({ data }: any) => {
                 ></div>
               ) : (
                 <span className="grey-medium text-09x1">
-                  {user.role === 0 ? 'User' : 'Admin'}
+                  {isAdmin ? 'Admin' : 'User'}
                 </span>
               )}
             </div>

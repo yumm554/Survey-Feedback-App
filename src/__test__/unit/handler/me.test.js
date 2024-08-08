@@ -17,6 +17,7 @@ describe('Me Hook', () => {
         username: 'testuser',
         role: 0,
         email: 'testuser@example.com',
+        isAdmin: false,
       },
     };
 
@@ -28,7 +29,7 @@ describe('Me Hook', () => {
     await waitFor(() =>
       expect(result.current).toMatchObject({
         isLoading: false,
-        user: userData.user,
+        user: { username: 'testuser', role: 0, email: 'testuser@example.com' },
         isAdmin: false,
       })
     );
@@ -41,6 +42,7 @@ describe('Me Hook', () => {
         username: 'testuser',
         role: 1,
         email: 'testuser@example.com',
+        isAdmin: true,
       },
     };
 
@@ -52,7 +54,11 @@ describe('Me Hook', () => {
     await waitFor(() =>
       expect(result.current).toMatchObject({
         isLoading: false,
-        user: userData.user,
+        user: {
+          username: 'testuser',
+          role: 1,
+          email: 'testuser@example.com',
+        },
         isAdmin: true,
       })
     );
