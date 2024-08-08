@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
     const { name, email, rating, comments } = reqBody;
-    console.log({ name, email, rating, comments });
 
     const user = await User.findOne({ email });
 
@@ -27,7 +26,6 @@ export async function POST(request: NextRequest) {
     });
 
     const savedFeedback = await newFeedback.save();
-    console.log({ savedFeedback });
 
     //return response
 

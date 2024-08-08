@@ -25,7 +25,7 @@ const useFeedbackForm = () => {
       setLoading(true);
       setDisable(true);
       const response = await axios.post(`/api/users/userfeedback`, feedback);
-      console.log('Submission success', response.data);
+      console.log('Submission success');
       setSuccess(response.data?.message);
       setFeedback({ ...feedback, comments: '', rating: 3 });
     } catch (error: any) {

@@ -77,8 +77,6 @@ export async function POST(request: NextRequest) {
     });
 
     const savedUser = await newUser.save();
-    console.log('user', newUser);
-    console.log({ savedUser });
 
     return NextResponse.json({
       message: 'Successfully Signed Up',

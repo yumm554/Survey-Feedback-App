@@ -39,7 +39,7 @@ const useChangePassword = () => {
         old_password: password.old_password,
         password: password.password,
       });
-      console.log('Password updated success', response.data);
+      console.log('Password updated success');
       setSuccess(response.data?.message);
       setPassword({
         old_password: '',

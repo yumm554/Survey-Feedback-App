@@ -313,6 +313,10 @@ describe('FeedbackList Page', () => {
       ).toBeInTheDocument();
 
       expect(screen.getByText('Page 1 of 1')).toBeInTheDocument();
+
+      //check pagination buttons to be disabled
+      expect(screen.getByLabelText('next button')).toHaveClass('disabled');
+      expect(screen.getByLabelText('prev button')).toHaveClass('disabled');
     });
 
     /***************ME CALL***************/
@@ -333,6 +337,65 @@ describe('FeedbackList Page', () => {
     //check success
     await waitFor(() => {
       expect(screen.getByText('Redirecting...')).toBeInTheDocument();
+    });
+  });
+
+  it('handles pagination disable when less than 10 feedbacks exist', async () => {
+    //setup API call data
+    const userMeData = {
+      message: 'User found',
+      user: {
+        username: 'testuser',
+        role: 0,
+        email: 'testuser@example.com',
+      },
+    };
+
+    const limit = 10;
+    const feedbackData = {
+      feedbacks: [
+        {
+          _id: '1',
+          name: 'Test User 1',
+          email: 'user1@example.com',
+          rating: 5,
+        },
+      ],
+      pagination: {
+        page: 1,
+        totalPages: 1,
+        totalFeedbacks: 1,
+      },
+    };
+
+    //setup mock API calls
+    mock.onGet('/api/users/me').reply(200, userMeData);
+    mock
+      .onGet(`/api/users/feedbacks?page=1&limit=${limit}`)
+      .reply(200, feedbackData);
+
+    //render the component
+    render(<FeedbackList />);
+
+    /***************LIST FEEDBACKS***************/
+    //check loading
+    expect(screen.getByText('loading...')).toBeInTheDocument();
+    //check pagination buttons to be disabled
+    expect(screen.getByLabelText('next button')).toHaveClass('disabled');
+    expect(screen.getByLabelText('prev button')).toHaveClass('disabled');
+
+    //check default text and pagination
+    await waitFor(() => {
+      //check pagination buttons to be disabled
+      expect(screen.getByLabelText('next button')).toHaveClass('disabled');
+      expect(screen.getByLabelText('prev button')).toHaveClass('disabled');
+    });
+
+    /***************ME CALL***************/
+    await waitFor(() => {
+      //expect username and role in header
+      expect(screen.getByText('testuser')).toBeInTheDocument();
+      expect(screen.getByText('User')).toBeInTheDocument();
     });
   });
 });

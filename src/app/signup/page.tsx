@@ -82,6 +82,7 @@ const SignUp = () => {
                   onChange={(e) =>
                     setUser({ ...user, username: e.target.value })
                   }
+                  autoComplete="username"
                 />
                 <p className="validation-error">
                   Username must be between 2-10 characters, can contain
@@ -98,6 +99,7 @@ const SignUp = () => {
                 placeholder="Email"
                 required
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
+                autoComplete="email"
               />
               {/* <label htmlFor="role">Role</label>
       <input
@@ -144,6 +146,7 @@ const SignUp = () => {
                     required
                     placeholder="Key"
                     onChange={(e) => setUser({ ...user, key: e.target.value })}
+                    autoComplete="off"
                   />
                 </>
               ) : (
@@ -162,6 +165,7 @@ const SignUp = () => {
                   onChange={(e) =>
                     setUser({ ...user, password: e.target.value })
                   }
+                  autoComplete="current-password"
                 />
                 <span
                   className="show-password-icon"
@@ -187,6 +191,7 @@ const SignUp = () => {
                   onChange={(e) =>
                     setUser({ ...user, password_confirmation: e.target.value })
                   }
+                  autoComplete="current-password"
                 />
                 <span
                   className="show-password-icon"

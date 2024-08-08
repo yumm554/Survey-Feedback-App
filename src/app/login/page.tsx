@@ -64,6 +64,7 @@ const Login = () => {
                 placeholder="Email"
                 required
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
+                autoComplete="email"
               />
 
               <div className="relative">
@@ -77,6 +78,7 @@ const Login = () => {
                   onChange={(e) =>
                     setUser({ ...user, password: e.target.value })
                   }
+                  autoComplete="current-password"
                 />
                 <span
                   className="show-password-icon"

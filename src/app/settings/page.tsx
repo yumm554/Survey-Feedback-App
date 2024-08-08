@@ -125,6 +125,20 @@ const Setting = () => {
                     onSubmit={handleSubmit}
                     className="row-gap row-gap_20 settings-form"
                   >
+                    <div className="settings-form-input hide">
+                      <label htmlFor="email">Email</label>
+                      <input
+                        id="email"
+                        type="text"
+                        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                        disabled
+                        value={user.email || `couldn't fetch`}
+                        placeholder="Email"
+                        required
+                        autoComplete="email"
+                      />
+                    </div>
+
                     <label htmlFor="old_password">Old Password</label>
                     <input
                       className="settings-form-input"
@@ -139,6 +153,7 @@ const Setting = () => {
                           old_password: e.target.value,
                         })
                       }
+                      autoComplete="current-password"
                     />
 
                     <div className="relative settings-form-input">
@@ -153,6 +168,7 @@ const Setting = () => {
                         onChange={(e) =>
                           setPassword({ ...password, password: e.target.value })
                         }
+                        autoComplete="new-password"
                       />
                       <span
                         className="show-password-icon"
@@ -183,6 +199,7 @@ const Setting = () => {
                             password_confirmation: e.target.value,
                           })
                         }
+                        autoComplete="new-password"
                       />
                       <span
                         className="show-password-icon"

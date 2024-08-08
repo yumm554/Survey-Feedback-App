@@ -50,7 +50,6 @@ const UserFeedback = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const updatedFeedback = { ...feedback, email: user.email };
-    console.log(updatedFeedback);
     onSubmit(updatedFeedback, setFeedback);
   };
 
@@ -111,6 +110,7 @@ const UserFeedback = () => {
                     onChange={(e) =>
                       setFeedback({ ...feedback, name: e.target.value })
                     }
+                    autoComplete="name"
                   />
 
                   {isLoading ? (
@@ -128,18 +128,19 @@ const UserFeedback = () => {
                         value={user.email || `couldn't fetch`}
                         placeholder="Email"
                         required
+                        autoComplete="email"
                       />
                     </>
                   )}
 
-                  <label>Rating</label>
                   <div className="align-center rating_wrapper">
                     <div
                       className={`rating-box align-center green ${
                         feedback.rating === 5 ? 'active' : ''
                       }`}
                       onClick={() => handleRatingClick(5)}
-                      aria-label="rating no"
+                      aria-label="rate 5 stars"
+                      role="button"
                     >
                       <RatingStar />
                       <span className="black-regular text-12x1">5</span>
@@ -150,7 +151,8 @@ const UserFeedback = () => {
                         feedback.rating === 4 ? 'active' : ''
                       }`}
                       onClick={() => handleRatingClick(4)}
-                      aria-label="rating no"
+                      aria-label="rate 4 stars"
+                      role="button"
                     >
                       <RatingStar />
                       <span className="black-regular text-12x1">4</span>
@@ -161,7 +163,8 @@ const UserFeedback = () => {
                         feedback.rating === 3 ? 'active' : ''
                       }`}
                       onClick={() => handleRatingClick(3)}
-                      aria-label="rating no"
+                      aria-label="rate 3 stars"
+                      role="button"
                     >
                       <RatingStar />
                       <span className="black-regular text-12x1">3</span>
@@ -172,7 +175,8 @@ const UserFeedback = () => {
                         feedback.rating === 2 ? 'active' : ''
                       }`}
                       onClick={() => handleRatingClick(2)}
-                      aria-label="rating no"
+                      aria-label="rate 2 stars"
+                      role="button"
                     >
                       <RatingStar />
                       <span className="black-regular text-12x1">2</span>
@@ -183,7 +187,8 @@ const UserFeedback = () => {
                         feedback.rating === 1 ? 'active' : ''
                       }`}
                       onClick={() => handleRatingClick(1)}
-                      aria-label="rating no"
+                      aria-label="rate 1 star"
+                      role="button"
                     >
                       <RatingStar />
                       <span className="black-regular text-12x1">1</span>

@@ -15,6 +15,11 @@ body {
   background: var(--highlight);
   border-radius: 6px;
 }
+.highlight-background p {
+  color: #000;
+  font-weight: 500;
+}
+
 .align-right {
   text-align: right;
 }
@@ -125,6 +130,10 @@ span {
   margin: 0;
 }
 
+.hide {
+  display: none !important;
+}
+
 input:not([type='checkbox']),
 textarea {
   padding: 1.2rem;
@@ -227,10 +236,6 @@ input:disabled {
 }
 .rate-lightest-green {
   background: rgba(29, 191, 116, 0.25);
-}
-
-.PS-logo {
-  height: auto;
 }
 
 .grey-medium {
@@ -465,6 +470,19 @@ ul li {
 }
 
 @media screen and (max-width: 1024px) and (min-width: 768px) {
+  .sidebar,
+  .mob-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 99999999;
+  }
+  .mob-nav-overlay {
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
   .validation-error {
     width: -webkit-fill-available;
   }
@@ -501,7 +519,7 @@ ul li {
     margin-bottom: 0 !important;
   }
   .desktop-hide {
-    display: block;
+    display: flex;
   }
   .tab-hide {
     display: none;
@@ -509,6 +527,19 @@ ul li {
 }
 
 @media screen and (max-width: 767px) {
+  .sidebar,
+  .mob-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 99999999;
+  }
+  .mob-nav-overlay {
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
   .validation-error {
     width: -webkit-fill-available;
   }
@@ -525,7 +556,7 @@ ul li {
     display: none;
   }
   .desktop-hide {
-    display: block;
+    display: flex;
   }
   .mob__col {
     display: flex;

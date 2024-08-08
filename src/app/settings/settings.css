@@ -20,18 +20,7 @@ body {
     height: auto;
     overflow: auto;
   }
-  .feedback-sidebar,
-  .mob-nav-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 99999999;
-  }
-  .mob-nav-overlay {
-    width: 100vw;
-    background-color: rgba(0, 0, 0, 0.2);
-  }
+
   .settings-form-input {
     width: 70% !important;
   }
@@ -41,18 +30,6 @@ body {
   body {
     height: auto;
     overflow: auto;
-  }
-  .feedback-sidebar,
-  .mob-nav-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 99999999;
-  }
-  .mob-nav-overlay {
-    width: 100vw;
-    background-color: rgba(0, 0, 0, 0.2);
   }
   .mob-no-right {
     text-align: left;

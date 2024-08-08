@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import BulletPoints from './BulletPoints';
+import Logo from './Logo';
 
 interface HeadAsideProps {
   colors: Colors;
@@ -17,24 +17,12 @@ const HeadAside: React.FC<HeadAsideProps> = ({ colors }) => {
   return (
     <>
       <header className="padding-around-global desktop-hide tab-hide">
-        <Image
-          className="PS-logo desktop-hide"
-          src="/PS-logo.png"
-          alt="PS logo"
-          width="70"
-          height="70"
-        />
+        <Logo />
       </header>
       <aside className="side-width mob-hide">
         <div className="max-height-inner max-height row-gap">
-          <header className="padding-around-global">
-            <Image
-              className="PS-logo"
-              src="/PS-logo.png"
-              alt="PS logo"
-              width="70"
-              height="70"
-            />
+          <header className="padding-around-global mob-hide">
+            <Logo />
           </header>
           <main className="row-gap_40 main__wrapper padding-around-global">
             <BulletPoints

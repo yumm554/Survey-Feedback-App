@@ -2,8 +2,8 @@
 
 import { Hamburger, NavArrow, Settings } from '@/assets/icons/getIcon';
 import { User } from '../assets/icons/getIcon';
-import Image from 'next/image';
 import Link from 'next/link';
+import Logo from './Logo';
 
 const Header = ({ data }: any) => {
   const { user, mobNav, setMobNav, isLoading, sidebar } = data;
@@ -13,7 +13,7 @@ const Header = ({ data }: any) => {
       <header className="header__white space-between padding-around-global">
         <>
           <div
-            className="mob__hamburger desktop-hide"
+            className="mob__hamburger desktop-hide pointer"
             onClick={() => setMobNav(!mobNav)}
             aria-label="mob nav toggle"
           >
@@ -29,15 +29,9 @@ const Header = ({ data }: any) => {
             </Link>
           )}
           {!sidebar && (
-            <>
-              <Image
-                className="PS-logo mob-hide tab-hide"
-                src="/PS-logo.png"
-                alt="PS logo"
-                width="70"
-                height="70"
-              />
-            </>
+            <div className="mob-hide tab-hide">
+              <Logo />
+            </div>
           )}
         </>
 

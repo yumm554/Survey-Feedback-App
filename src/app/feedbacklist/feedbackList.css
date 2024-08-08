@@ -77,18 +77,7 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
     height: auto;
     overflow: auto;
   }
-  .feedback-sidebar,
-  .mob-nav-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 99999999;
-  }
-  .mob-nav-overlay {
-    width: 100vw;
-    background-color: rgba(0, 0, 0, 0.2);
-  }
+
   th,
   td {
     padding: 1rem 0.2rem;
@@ -118,18 +107,7 @@ tbody > tr:not(.no-background):nth-child(2n + 1) {
     height: auto;
     overflow: auto;
   }
-  .feedback-sidebar,
-  .mob-nav-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 99999999;
-  }
-  .mob-nav-overlay {
-    width: 100vw;
-    background-color: rgba(0, 0, 0, 0.2);
-  }
+
   th,
   td {
     padding: 1rem 0.2rem;

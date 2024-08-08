@@ -58,7 +58,7 @@ describe('User Feedback Page', () => {
     //render the required field
     const nameInput = screen.getByLabelText('Name');
     const commentInput = screen.getByLabelText('Comments');
-    const ratings = screen.getAllByLabelText('rating no');
+    const rating5 = screen.getByLabelText('rate 5 stars');
 
     //submit form with values
     fireEvent.change(nameInput, {
@@ -68,7 +68,6 @@ describe('User Feedback Page', () => {
       target: { value: 'Great service!' },
     });
 
-    const rating5 = ratings[0];
     fireEvent.click(rating5);
     expect(rating5).toHaveClass('active');
     const submitButton = screen.getByRole('button', {
@@ -88,7 +87,7 @@ describe('User Feedback Page', () => {
       expect(
         screen.getByText('Feedback submitted successfully')
       ).toBeInTheDocument();
-      expect(ratings[2]).toHaveClass('active');
+      expect(screen.getByLabelText('rate 3 stars')).toHaveClass('active');
       expect(commentInput.value).toBe('');
     });
   });
@@ -119,7 +118,7 @@ describe('User Feedback Page', () => {
     //render the required field
     const nameInput = screen.getByLabelText('Name');
     const commentInput = screen.getByLabelText('Comments');
-    const ratings = screen.getAllByLabelText('rating no');
+    const rating5 = screen.getByLabelText('rate 5 stars');
 
     //submit form with values
     fireEvent.change(nameInput, {
@@ -129,7 +128,6 @@ describe('User Feedback Page', () => {
       target: { value: 'Great service!' },
     });
 
-    const rating5 = ratings[0];
     fireEvent.click(rating5);
     expect(rating5).toHaveClass('active');
     const submitButton = screen.getByRole('button', {

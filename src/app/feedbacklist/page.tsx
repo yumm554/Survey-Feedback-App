@@ -77,7 +77,7 @@ const FeedbackList: React.FC = () => {
                     <div className="text-loader"></div>
                   ) : (
                     <p>
-                      Over {pagination.totalFeedbacks} response{' '}
+                      Over {pagination.totalFeedbacks} response
                       {pagination.totalFeedbacks > 1 ? 's' : ''} have been
                       collected from users.
                     </p>
@@ -161,7 +161,7 @@ const FeedbackList: React.FC = () => {
                       )
                     }
                     className={
-                      pagination.page === pagination.totalPages ||
+                      pagination.page >= pagination.totalPages ||
                       isFeedbackLoading
                         ? 'disabled'
                         : ''

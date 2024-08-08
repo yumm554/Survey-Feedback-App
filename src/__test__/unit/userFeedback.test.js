@@ -47,7 +47,12 @@ describe('UserFeedback Component', () => {
     render(<UserFeedback />);
     expect(screen.getByLabelText('Name')).toBeInTheDocument();
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
-    expect(screen.getByText('Rating')).toBeInTheDocument();
+    expect(screen.getByLabelText('rate 5 stars')).toBeInTheDocument();
+    expect(screen.getByLabelText('rate 4 stars')).toBeInTheDocument();
+    expect(screen.getByLabelText('rate 3 stars')).toBeInTheDocument();
+    expect(screen.getByLabelText('rate 2 stars')).toBeInTheDocument();
+    expect(screen.getByLabelText('rate 1 star')).toBeInTheDocument();
+
     expect(screen.getByLabelText('Comments')).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Submit Feedback' })
@@ -56,11 +61,8 @@ describe('UserFeedback Component', () => {
 
   it('updates rating state on rating click', () => {
     render(<UserFeedback />);
-    const ratings = screen.getAllByLabelText('rating no');
-    expect(ratings).toHaveLength(5);
-
-    const rating3 = ratings[2];
-    const rating5 = ratings[0];
+    const rating3 = screen.getByLabelText('rate 3 stars');
+    const rating5 = screen.getByLabelText('rate 5 stars');
 
     fireEvent.click(rating5);
     expect(rating5).toHaveClass('active');
@@ -85,7 +87,7 @@ describe('UserFeedback Component', () => {
       target: { value: 'Great service!' },
     });
 
-    const rating5 = screen.getAllByLabelText('rating no')[0];
+    const rating5 = screen.getByLabelText('rate 5 stars');
     fireEvent.click(rating5);
     expect(rating5).toHaveClass('active');
 

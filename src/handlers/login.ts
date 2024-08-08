@@ -21,7 +21,7 @@ const useLogin = () => {
       setLoading(true);
       setDisable(true);
       const response = await axios.post('/api/users/login', user);
-      console.log('Login success', response.data);
+      console.log('Login success');
       setSuccess('Redirecting...');
       if (response.data.role === 0) {
         router.push('/userfeedback');
