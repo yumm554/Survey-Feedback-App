@@ -225,4 +225,30 @@ describe('Signup Component', () => {
     const successMessage = screen.getByText('Successfully Signed Up');
     expect(successMessage).toBeInTheDocument();
   });
+
+  it('handles when user type the key for admin but select back user role, the key input should be empty', () => {
+    render(<SignUp />);
+
+    const userCheckbox = screen.getByRole('checkbox', { name: 'User' });
+    const adminCheckbox = screen.getByRole('checkbox', { name: 'Admin' });
+
+    //expect usercheckbox to be checked
+    expect(userCheckbox).toBeChecked();
+
+    //click admin checkbox
+    fireEvent.click(adminCheckbox);
+
+    const keyInput = screen.getByLabelText('Key');
+    expect(keyInput).toBeInTheDocument();
+    fireEvent.change(keyInput, { target: { value: 'AAAAAAAAA' } });
+
+    //click user checkbox again
+    fireEvent.click(userCheckbox);
+
+    //click again admin
+    fireEvent.click(adminCheckbox);
+
+    //expect key input to be empty
+    expect(screen.getByLabelText('Key').value).toBe('');
+  });
 });

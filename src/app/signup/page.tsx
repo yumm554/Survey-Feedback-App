@@ -117,7 +117,7 @@ const SignUp = () => {
                   id="user"
                   value={0}
                   checked={user.role === 0}
-                  onChange={() => setUser({ ...user, role: 0 })}
+                  onChange={() => setUser({ ...user, role: 0, key: '' })}
                 />
                 <label htmlFor="user" className="no-hide">
                   User
