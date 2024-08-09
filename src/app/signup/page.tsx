@@ -45,7 +45,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="col__flex max-height mob__col">
+    <div className="col__flex max-height mob__col signup_wrapper">
       <HeadAside
         colors={{
           normal: 'purple',

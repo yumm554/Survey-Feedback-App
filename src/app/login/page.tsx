@@ -30,7 +30,7 @@ const Login = () => {
   };
 
   return (
-    <div className="col__flex max-height mob__col">
+    <div className="col__flex max-height mob__col login_wrapper">
       <HeadAside
         colors={{
           normal: 'yellow',

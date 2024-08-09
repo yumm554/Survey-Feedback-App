@@ -61,7 +61,7 @@ const UserFeedback = () => {
       {isError ? (
         <ErrorFetchingUser retryCalls={{ retry }}></ErrorFetchingUser>
       ) : (
-        <div>
+        <div className="page_specific">
           <Sidebar
             data={{
               user,
@@ -93,7 +93,7 @@ const UserFeedback = () => {
               <div className="absolute-back-container">
                 <FeedbackFormBack />
               </div>
-              <div className="form__white row-gap row-gap_20 padding-around-global">
+              <div className="form__white row-gap row-gap_20 padding-around-global feedbackForm">
                 <div className="align-center signup__heading">
                   <Dashboard />
                   <h1 className="text-1x1 black-regular">

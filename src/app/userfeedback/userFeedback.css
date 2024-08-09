@@ -10,13 +10,22 @@ body {
 .side-width-feedback {
   width: 220px;
 }
+
+.page_specific {
+  background: #fff;
+}
+
+.feedbackForm {
+  position: relative;
+}
+
 .feedback_wrapper.align-center {
   justify-content: center;
 }
 
 .absolute-back-container {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   display: flex;
   width: 100%;
   height: 100%;

@@ -5,8 +5,11 @@ body {
 
 @media screen and (max-width: 767px) {
   body {
-    background: #fff;
     height: auto;
     overflow: auto;
+  }
+
+  .login_wrapper {
+    background: #fff;
   }
 }
