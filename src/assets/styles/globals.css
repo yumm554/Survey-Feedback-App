@@ -4,6 +4,7 @@ body * {
 body {
   margin: 0;
   letter-spacing: 0.2px;
+  background: var(--background-grey);
 }
 
 .hr {
@@ -334,6 +335,13 @@ label:not(.no-hide) {
   justify-content: center;
 }
 
+.justify-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
 .form__white {
   width: fit-content;
   background: #fff;
@@ -378,6 +386,7 @@ label:not(.no-hide) {
 
 .side-width {
   width: 290px;
+  min-width: 290px;
 }
 
 aside {

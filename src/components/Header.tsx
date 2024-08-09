@@ -37,9 +37,14 @@ const Header = ({ data }: any) => {
 
         <div className="align-center">
           {!sidebar &&
-            (isAdmin ? (
+            (isLoading ? (
+              <div
+                className="text-loader"
+                aria-label="header item loader"
+              ></div>
+            ) : isAdmin ? (
               <Link
-                href="/feedbackList"
+                href="/feedbacklist"
                 className="no-underline align-center mob-hide tab-hide"
               >
                 <span className="black-regular">Dashboard</span> <NavArrow />
@@ -52,6 +57,7 @@ const Header = ({ data }: any) => {
                 <span className="black-regular">Settings</span> <NavArrow />
               </Link>
             ))}
+
           <div className="align-center">
             <div className="user-border">
               <User />

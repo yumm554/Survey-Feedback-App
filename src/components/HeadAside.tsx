@@ -20,11 +20,11 @@ const HeadAside: React.FC<HeadAsideProps> = ({ colors }) => {
         <Logo />
       </header>
       <aside className="side-width mob-hide">
-        <div className="max-height-inner max-height row-gap">
-          <header className="padding-around-global mob-hide">
+        <div className="max-height-inner max-height row-gap padding-around-global">
+          <header className="mob-hide">
             <Logo />
           </header>
-          <main className="row-gap_40 main__wrapper padding-around-global">
+          <main className="row-gap_40 justify-left">
             <BulletPoints
               colors={{
                 normal,
