@@ -89,7 +89,7 @@ const UserFeedback = () => {
                 Submit the Survey Feedback Form
               </h3>
             </div>
-            <div className="justify-top main__wrapper feedback relative">
+            <div className="justify-top justify-center feedback relative">
               <div className="absolute-back-container">
                 <FeedbackFormBack />
               </div>
