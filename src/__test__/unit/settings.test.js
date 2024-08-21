@@ -188,7 +188,7 @@ describe('Setting Component', () => {
 
     //expect error on screen
     expect(
-      screen.getByText(`Couldn't connect to the internet!`)
+      screen.getByText(`Oops! We’re having trouble connecting right now.`)
     ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'try again' })

@@ -233,12 +233,18 @@ describe('FeedbackList Page', () => {
     //expect error on screen
     await waitFor(() => {
       expect(
-        screen.getByText(`Couldn't connect to the internet!`)
+        screen.getByText(`Oops! We’re having trouble connecting right now.`)
       ).toBeInTheDocument();
     });
 
     const retryButton = screen.getByRole('button', { name: 'try again' });
     expect(retryButton).toBeInTheDocument();
+
+    // Set up mock API for verify token
+    const userTokenData = {
+      message: 'Token is valid',
+    };
+    mock.onGet('/api/users/verifytoken').reply(200, userTokenData);
 
     // Set up mock API response for retry call
     const userMeRetryData = {

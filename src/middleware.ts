@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
       try {
         // Validate the token to potentially redirect authenticated users away from public pages
         const secret = new TextEncoder().encode(process.env.JWT_SECRET || '');
-        const { payload: verifiedPayload } = await jwtVerify(token, secret);
+        const { payload } = await jwtVerify(token, secret);
 
         // Redirect authenticated users away from public pages
         return NextResponse.redirect(new URL('/', request.nextUrl));

@@ -53,7 +53,7 @@ const UserFeedback = () => {
     onSubmit(updatedFeedback, setFeedback);
   };
 
-  //retry calls on internet back connection
+  //retry call
   useDebounceRetry(retry);
 
   return (

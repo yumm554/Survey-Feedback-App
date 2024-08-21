@@ -32,7 +32,7 @@ const FeedbackList: React.FC = () => {
     retry: retryFeedbacks,
   } = useFetchFeedbacks(page, limit);
 
-  //retry calls on internet back connection
+  //retry call
   useDebounceRetry(retry, retryFeedbacks);
 
   return (
